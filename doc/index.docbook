@@ -25,14 +25,14 @@
      update years to 2012
      switch from CVS to Git
      add id attribute to <book>
-     
+
      kdoctemplate v0.9.1 2010-10-27 lueck
      changed releaseinfo format
      removed screenshot format="EPS
      added comment when to write a command reference
      added tip using id's in varlistentries
      removed refentry stuff
-     
+
      kdoctemplate v0.9 January 10 2003
      Changes to comments to clarify entity usage January 10 2003
      Minor update to "Credits and Licenses" section on August 24, 2000
@@ -167,14 +167,14 @@ patent issues. -->
 
 <screenshot>
 <screeninfo>Here's a screenshot of &kring;</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="screenshot.png" format="PNG"/>
-	  </imageobject>
-	  <textobject>
-	    <phrase>Screenshot</phrase>
-	  </textobject>
-	</mediaobject>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="screenshot.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase>Screenshot</phrase>
+    </textobject>
+  </mediaobject>
 </screenshot>
 </para>
 
@@ -185,12 +185,12 @@ patent issues. -->
 <para>It slices! It dices! and it comes with a free toaster!</para>
 <para>
 The Squiggle Tool <guiicon><inlinemediaobject>
-	  <imageobject>
-	    <imagedata fileref="squiggle.png" format="PNG"/>
-	  </imageobject>
-	  <textobject>
-	    <phrase>Squiggle</phrase>
-	  </textobject>
+  <imageobject>
+    <imagedata fileref="squiggle.png" format="PNG"/>
+  </imageobject>
+  <textobject>
+    <phrase>Squiggle</phrase>
+  </textobject>
 </inlinemediaobject></guiicon> is used to draw squiggly lines all over
 the &kring; main window. It's not a bug, it's a feature!
 </para>
@@ -204,18 +204,18 @@ the &kring; main window. It's not a bug, it's a feature!
 <!-- (OPTIONAL, BUT RECOMMENDED) This chapter should list all of the
 application windows and their menubar and toolbar commands for easy reference.
 Also include any keys that have a special function but have no equivalent in the
-menus or toolbars. 
+menus or toolbars.
 This may not be necessary for small apps or apps with no tool or menu bars.
 
-Don't bother users with well known kde menu items like Settings->Shortcuts etc. 
+Don't bother users with well known kde menu items like Settings->Shortcuts etc.
 
 Use cases for a command reference:
 
-Applications with many menu items (Kate/Konqueror) 
+Applications with many menu items (Kate/Konqueror)
 Applications with different modes and menus (KWrite/Konqueror)
 -> Enables search for menu items
 
-For Applications with default menu items and some special items where user 
+For Applications with default menu items and some special items where user
 needs additional information use something like:
 "Apart from the common KDE menu items you find these action in the menu:
 
@@ -234,7 +234,7 @@ Use variablelist markup for this
 <para>
 <variablelist>
 <varlistentry  id="file-new">
-<!-- Tip: With id's here, then you can use them like 
+<!-- Tip: With id's here, then you can use them like
 "select <xref linkend="file-new"/> to open the file dialog"
 which will be expanded to:
 "select File->New (Ctrl+N) to open the file dialog"
@@ -379,7 +379,7 @@ Documentation Copyright &copy; 2012-2014 George N. Ugnacious <email>gnu@kde.org<
      (NOTE:  All documentation are licensed under the FDL,
      regardless of what license the application uses) -->
 
-&underGPL;        	 <!-- GPL License -->
+&underGPL;               <!-- GPL License -->
 &underBSDLicense;        <!-- BSD License -->
 &underArtisticLicense;   <!-- BSD Artistic License -->
 &underX11License;        <!-- X11 License  -->
