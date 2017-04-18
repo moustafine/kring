@@ -1,6 +1,6 @@
 # Code generation options for kconfig_compiler
-File=kringSettings.kcfg
-ClassName=kringSettings
+File=kringsettings.kcfg
+ClassName=KringSettings
 Singleton=true
 # will create the necessary code for setting those variables
 Mutators=color_background,color_foreground

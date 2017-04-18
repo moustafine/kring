@@ -4,8 +4,8 @@ set(kring_SRCS
     kringview.cpp
 )
 
-kconfig_add_kcfg_files(kring_SRCS kringSettings.kcfgc)
-ki18n_wrap_ui(kring_SRCS kringViewBase.ui settingsBase.ui)
+kconfig_add_kcfg_files(kring_SRCS kringsettings.kcfgc)
+ki18n_wrap_ui(kring_SRCS kringviewbase.ui settingsbase.ui)
 
 add_executable(kring ${kring_SRCS})
 

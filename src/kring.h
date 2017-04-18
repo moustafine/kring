@@ -22,12 +22,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define KRING_H
 
 #include <QLoggingCategory>
+
 #include <KXmlGuiWindow>
 
-#include "ui_kringViewBase.h"
-#include "ui_settingsBase.h"
-#include "kringSettings.h"
+#include "kringsettings.h"
 #include "kringview.h"
+
+#include "ui_kringviewbase.h"
+#include "ui_settingsbase.h"
 
 Q_DECLARE_LOGGING_CATEGORY(KRING)
 
@@ -39,19 +41,19 @@ Q_DECLARE_LOGGING_CATEGORY(KRING)
  * @author Marat Moustafine <moustafine@tuta.io>
  * @version 0.1
  */
-class kring : public KXmlGuiWindow
+class Kring : public KXmlGuiWindow
 {
     Q_OBJECT
 public:
     /**
      * Default Constructor
      */
-    kring();
+    Kring();
 
     /**
      * Default Destructor
      */
-    virtual ~kring();
+    virtual ~Kring();
 
 private slots:
     /**
@@ -67,10 +69,10 @@ private slots:
 private:
     // this is the name of the root widget inside our Ui file
     // you can rename it in designer and then change it here
-    Ui::settingsBase settingsBase;
-    Ui::kringViewBase kringViewBase;
-    QAction *m_switchAction;
-    kringView *m_kringView;
+    Ui::SettingsBase settingsBase;
+    Ui::KringViewBase kringViewBase;
+    QAction * switchAction;
+    KringView * kringView;
 };
 
 #endif // KRING_H

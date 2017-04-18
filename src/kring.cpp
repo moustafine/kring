@@ -25,34 +25,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KActionCollection>
 #include <KConfigDialog>
 
-kring::kring()
+Kring::Kring()
     : KXmlGuiWindow()
 {
-    m_kringView = new kringView(this);
-    setCentralWidget(m_kringView);
-    m_switchAction = actionCollection()->addAction(QStringLiteral("switch_action"), this, SLOT(slotSwitchColors()));
-    m_switchAction->setText(i18n("Switch Colors"));
-    m_switchAction->setIcon(QIcon::fromTheme(QStringLiteral("fill-color")));
-    connect(m_switchAction, SIGNAL(triggered(bool)), m_kringView, SLOT(slotSwitchColors()));
+    kringView = new KringView(this);
+    setCentralWidget(kringView);
+    switchAction = actionCollection()->addAction(QStringLiteral("switch_action"), this, SLOT(slotSwitchColors()));
+    switchAction->setText(i18n("Switch Colors"));
+    switchAction->setIcon(QIcon::fromTheme(QStringLiteral("fill-color")));
+    connect(switchAction, SIGNAL(triggered(bool)), kringView, SLOT(slotSwitchColors()));
     KStandardAction::openNew(this, SLOT(fileNew()), actionCollection());
     KStandardAction::quit(qApp, SLOT(closeAllWindows()), actionCollection());
     KStandardAction::preferences(this, SLOT(settingsConfigure()), actionCollection());
     setupGUI();
 }
 
-kring::~kring()
+Kring::~Kring()
 {
 }
 
-void kring::fileNew()
+void Kring::fileNew()
 {
-    qCDebug(KRING) << "kring::fileNew()";
-    (new kring)->show();
+    qCDebug(KRING) << "Kring::fileNew()";
+    (new Kring)->show();
 }
 
-void kring::settingsConfigure()
+void Kring::settingsConfigure()
 {
-    qCDebug(KRING) << "kring::settingsConfigure()";
+    qCDebug(KRING) << "Kring::settingsConfigure()";
     // The preference dialog is derived from prefs_base.ui
     //
     // compare the names of the widgets in the .ui file
@@ -61,11 +61,11 @@ void kring::settingsConfigure()
     if (KConfigDialog::showDialog(QStringLiteral("settings"))) {
         return;
     }
-    KConfigDialog *dialog = new KConfigDialog(this, QStringLiteral("settings"), kringSettings::self());
-    QWidget *generalSettingsDialog = new QWidget;
+    KConfigDialog * dialog = new KConfigDialog(this, QStringLiteral("settings"), KringSettings::self());
+    QWidget * generalSettingsDialog = new QWidget;
     settingsBase.setupUi(generalSettingsDialog);
     dialog->addPage(generalSettingsDialog, i18n("General"), QStringLiteral("package_setting"));
-    connect(dialog, SIGNAL(settingsChanged(QString)), m_kringView, SLOT(slotSettingsChanged()));
+    connect(dialog, SIGNAL(settingsChanged(QString)), kringView, SLOT(slotSettingsChanged()));
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }

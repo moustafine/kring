@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>kringViewBase</class>
- <widget class="QWidget" name="kringViewBase">
+ <class>KringViewBase</class>
+ <widget class="QWidget" name="KringViewBase">
   <property name="geometry">
    <rect>
     <x>0</x>

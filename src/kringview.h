@@ -22,9 +22,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define KRINGVIEW_H
 
 #include <QLoggingCategory>
-Q_DECLARE_LOGGING_CATEGORY(KRING)
 
-#include "ui_kringViewBase.h"
+#include "ui_kringviewbase.h"
+
+Q_DECLARE_LOGGING_CATEGORY(KRING)
 
 /**
  * This class serves as the main window for kring.  It handles the
@@ -34,19 +35,19 @@ Q_DECLARE_LOGGING_CATEGORY(KRING)
  * @author Marat Moustafine <moustafine@tuta.io>
  * @version 0.1
  */
-class kringView : public QWidget
+class KringView : public QWidget
 {
     Q_OBJECT
 public:
     /**
      * Default Constructor
      */
-    explicit kringView(QWidget *parent);
+    explicit KringView(QWidget * parent);
 
     /**
      * Default Destructor
      */
-    virtual ~kringView();
+    virtual ~KringView();
 
 private slots:
     void slotSettingsChanged();
@@ -56,17 +57,17 @@ signals:
     /**
      * Use this signal to change the content of the statusbar
      */
-    void signalChangeStatusbar(const QString& text);
+    void signalChangeStatusbar(const QString & text);
 
     /**
      * Use this signal to change the content of the caption
      */
-    void signalChangeCaption(const QString& text);
+    void signalChangeCaption(const QString & text);
 
 private:
     // this is the name of the root widget inside our Ui file
     // you can rename it in designer and then change it here
-    Ui::kringViewBase m_ui;
+    Ui::KringViewBase kringViewBase;
 };
 
 #endif // KRINGVIEW_H

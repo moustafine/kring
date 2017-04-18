@@ -20,39 +20,39 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // application headers
 #include "kringview.h"
-#include "kringSettings.h"
+#include "kringsettings.h"
 
-kringView::kringView(QWidget *parent)
+KringView::KringView(QWidget * parent)
     : QWidget(parent)
 {
-    m_ui.setupUi(this);
+    kringViewBase.setupUi(this);
     slotSettingsChanged();
 }
 
-kringView::~kringView()
+KringView::~KringView()
 {
 }
 
-void kringView::slotSwitchColors()
+void KringView::slotSwitchColors()
 {
     // switch the foreground/background colors of the label
-    QColor color = kringSettings::color_background();
-    kringSettings::setColor_background(kringSettings::color_foreground());
-    kringSettings::setColor_foreground(color);
+    QColor color = KringSettings::color_background();
+    KringSettings::setColor_background(KringSettings::color_foreground());
+    KringSettings::setColor_foreground(color);
 
     slotSettingsChanged();
 }
 
-void kringView::slotSettingsChanged()
+void KringView::slotSettingsChanged()
 {
-    qCDebug(KRING) << "kringView::slotSettingsChanged()";
+    qCDebug(KRING) << "KringView::slotSettingsChanged()";
     QPalette palette;
-    palette.setColor(QPalette::Window, kringSettings::color_background());
-    palette.setColor(QPalette::WindowText, kringSettings::color_foreground());
-    m_ui.templateLabel->setPalette(palette);
+    palette.setColor(QPalette::Window, KringSettings::color_background());
+    palette.setColor(QPalette::WindowText, KringSettings::color_foreground());
+    kringViewBase.templateLabel->setPalette(palette);
 
     // i18n : internationalization
-    m_ui.templateLabel->setText(i18n("This project is %1 days old", kringSettings::val_time()));
+    kringViewBase.templateLabel->setText(i18n("This project is %1 days old", KringSettings::val_time()));
     emit signalChangeStatusbar(i18n("Settings changed"));
 }
 

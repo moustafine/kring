@@ -18,22 +18,23 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// application header
-#include "kring.h"
-
-// KDE headers
-#include <KAboutData>
-#include <KLocalizedString>
-
 // Qt headers
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QIcon>
 #include <QLoggingCategory>
 
+// KDE headers
+#include <KAboutData>
+#include <KLocalizedString>
+
+// application header
+#include "kring.h"
+
 Q_DECLARE_LOGGING_CATEGORY(KRING)
 Q_LOGGING_CATEGORY(KRING, "kring")
-int main(int argc, char **argv)
+
+int main(int argc, char ** argv)
 {
     QApplication application(argc, argv);
 
@@ -55,7 +56,7 @@ int main(int argc, char **argv)
     aboutData.processCommandLine(&parser);
     KAboutData::setApplicationData(aboutData);
 
-    kring *appwindow = new kring;
-    appwindow->show();
+    Kring * window = new Kring;
+    window->show();
     return application.exec();
 }
