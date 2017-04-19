@@ -37,37 +37,37 @@ Q_DECLARE_LOGGING_CATEGORY(KRING)
  */
 class KringView : public QWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    /**
-     * Default Constructor
-     */
-    explicit KringView(QWidget * parent);
+  /**
+   * Default Constructor
+   */
+  explicit KringView(QWidget * parent);
 
-    /**
-     * Default Destructor
-     */
-    virtual ~KringView();
+  /**
+   * Default Destructor
+   */
+  virtual ~KringView();
 
 private slots:
-    void slotSettingsChanged();
-    void slotSwitchColors();
+  void slotSettingsChanged();
+  void slotSwitchColors();
 
 signals:
-    /**
-     * Use this signal to change the content of the statusbar
-     */
-    void signalChangeStatusbar(const QString & text);
+  /**
+   * Use this signal to change the content of the statusbar
+   */
+  void signalChangeStatusbar(const QString & text);
 
-    /**
-     * Use this signal to change the content of the caption
-     */
-    void signalChangeCaption(const QString & text);
+  /**
+   * Use this signal to change the content of the caption
+   */
+  void signalChangeCaption(const QString & text);
 
 private:
-    // this is the name of the root widget inside our Ui file
-    // you can rename it in designer and then change it here
-    Ui::KringViewBase kringViewBase;
+  // this is the name of the root widget inside our Ui file
+  // you can rename it in designer and then change it here
+  Ui::KringViewBase kringViewBase;
 };
 
 #endif // KRINGVIEW_H

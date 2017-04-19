@@ -43,36 +43,36 @@ Q_DECLARE_LOGGING_CATEGORY(KRING)
  */
 class Kring : public KXmlGuiWindow
 {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    /**
-     * Default Constructor
-     */
-    Kring();
+  /**
+   * Default Constructor
+   */
+  Kring();
 
-    /**
-     * Default Destructor
-     */
-    virtual ~Kring();
+  /**
+   * Default Destructor
+   */
+  virtual ~Kring();
 
 private slots:
-    /**
-     * Create a new window
-     */
-    void fileNew();
+  /**
+   * Create a new window
+   */
+  void fileNew();
 
-    /**
-     * Open the settings dialog
-     */
-    void settingsConfigure();
+  /**
+   * Open the settings dialog
+   */
+  void settingsConfigure();
 
 private:
-    // this is the name of the root widget inside our Ui file
-    // you can rename it in designer and then change it here
-    Ui::SettingsBase settingsBase;
-    Ui::KringViewBase kringViewBase;
-    QAction * switchAction;
-    KringView * kringView;
+  // this is the name of the root widget inside our Ui file
+  // you can rename it in designer and then change it here
+  Ui::SettingsBase settingsBase;
+  Ui::KringViewBase kringViewBase;
+  QAction * switchAction;
+  KringView * kringView;
 };
 
 #endif // KRING_H

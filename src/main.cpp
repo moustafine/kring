@@ -36,27 +36,29 @@ Q_LOGGING_CATEGORY(KRING, "kring")
 
 int main(int argc, char ** argv)
 {
-    QApplication application(argc, argv);
+  QApplication application(argc, argv);
 
-    KLocalizedString::setApplicationDomain("kring");
-    KAboutData aboutData( QStringLiteral("kring"),
-                          i18n("Simple App"),
-                          QStringLiteral("0.1"),
-                          i18n("A Simple Application written with KDE Frameworks"),
-                          KAboutLicense::GPL,
-                          i18n("(c) 2017, Marat Moustafine <moustafine@tuta.io>"));
+  KLocalizedString::setApplicationDomain("kring");
+  KAboutData aboutData(QStringLiteral("kring"),
+                       i18n("Simple App"),
+                       QStringLiteral("0.1"),
+                       i18n("A Simple Application written with KDE Frameworks"),
+                       KAboutLicense::GPL,
+                       i18n("(c) 2017, Marat Moustafine <moustafine@tuta.io>"));
 
-    aboutData.addAuthor(i18n("Marat Moustafine"),i18n("Author"), QStringLiteral("moustafine@tuta.io"));
-    application.setWindowIcon(QIcon::fromTheme("kring"));
-    QCommandLineParser parser;
-    parser.addHelpOption();
-    parser.addVersionOption();
-    aboutData.setupCommandLine(&parser);
-    parser.process(application);
-    aboutData.processCommandLine(&parser);
-    KAboutData::setApplicationData(aboutData);
+  aboutData.addAuthor(i18n("Marat Moustafine"),
+                      i18n("Author"),
+                      QStringLiteral("moustafine@tuta.io"));
+  application.setWindowIcon(QIcon::fromTheme("kring"));
+  QCommandLineParser parser;
+  parser.addHelpOption();
+  parser.addVersionOption();
+  aboutData.setupCommandLine(&parser);
+  parser.process(application);
+  aboutData.processCommandLine(&parser);
+  KAboutData::setApplicationData(aboutData);
 
-    Kring * window = new Kring;
-    window->show();
-    return application.exec();
+  Kring * window = new Kring;
+  window->show();
+  return application.exec();
 }
