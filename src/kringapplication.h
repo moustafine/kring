@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QApplication>
 
-class Kring;
+class KringWindow;
 
 class KringApplication : public QApplication
 {
@@ -33,10 +33,10 @@ public:
   KringApplication(int & argc, char ** argv);
   ~KringApplication();
 
-  void setMainWindow(Kring * window);
+  void setMainWindow(KringWindow * window);
 
 private:
-  Kring * window;
+  KringWindow * window;
 };
 
 #endif // KRINGAPPLICATION_H

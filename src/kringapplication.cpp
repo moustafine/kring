@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KDBusService>
 #include <KWindowSystem>
 
-#include "kring.h"
+#include "kringwindow.h"
 
 KringApplication::KringApplication(int & argc, char ** argv)
   : QApplication(argc, argv),
@@ -47,7 +47,7 @@ KringApplication::~KringApplication()
   ;
 }
 
-void KringApplication::setMainWindow(Kring * window)
+void KringApplication::setMainWindow(KringWindow * window)
 {
   if (window) {
     this->window = window;

@@ -38,6 +38,7 @@ Q_DECLARE_LOGGING_CATEGORY(KRING)
 class KringView : public QWidget
 {
   Q_OBJECT
+
 public:
   /**
    * Default Constructor
@@ -49,7 +50,7 @@ public:
    */
   virtual ~KringView();
 
-private slots:
+public slots:
   void slotSettingsChanged();
   void slotSwitchColors();
 

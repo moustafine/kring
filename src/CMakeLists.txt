@@ -1,7 +1,7 @@
 set(kring_SRCS
-  kring.cpp
   kringapplication.cpp
   kringview.cpp
+  kringwindow.cpp
   main.cpp
 )
 
