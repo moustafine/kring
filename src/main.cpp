@@ -19,7 +19,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 // Qt headers
-#include <QApplication>
 #include <QCommandLineParser>
 #include <QIcon>
 #include <QLoggingCategory>
@@ -28,15 +27,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KAboutData>
 #include <KLocalizedString>
 
-// application header
-#include "kring.h"
+// Kring headers
+#include "kringapplication.h"
+#include "kringwindow.h"
 
 Q_DECLARE_LOGGING_CATEGORY(KRING)
 Q_LOGGING_CATEGORY(KRING, "kring")
 
 int main(int argc, char ** argv)
 {
-  QApplication application(argc, argv);
+  KringApplication application(argc, argv);
 
   KLocalizedString::setApplicationDomain("kring");
   KAboutData aboutData(QStringLiteral("kring"),
@@ -58,7 +58,8 @@ int main(int argc, char ** argv)
   aboutData.processCommandLine(&parser);
   KAboutData::setApplicationData(aboutData);
 
-  Kring * window = new Kring;
+  KringWindow * window = new KringWindow;
   window->show();
+  application.setMainWindow(window);
   return application.exec();
 }

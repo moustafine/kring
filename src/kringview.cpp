@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// application headers
 #include "kringview.h"
+
 #include "kringsettings.h"
 
 KringView::KringView(QWidget * parent)
@@ -31,6 +31,7 @@ KringView::KringView(QWidget * parent)
 
 KringView::~KringView()
 {
+  ;
 }
 
 void KringView::slotSwitchColors()
@@ -41,6 +42,8 @@ void KringView::slotSwitchColors()
   KringSettings::setColor_foreground(color);
 
   slotSettingsChanged();
+
+  return;
 }
 
 void KringView::slotSettingsChanged()
@@ -54,4 +57,6 @@ void KringView::slotSettingsChanged()
   // i18n : internationalization
   kringViewBase.templateLabel->setText(i18n("This project is %1 days old", KringSettings::val_time()));
   emit signalChangeStatusbar(i18n("Settings changed"));
+
+  return;
 }

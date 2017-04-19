@@ -18,48 +18,43 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// application headers
-#include "kring.h"
+#include "kringwindow.h"
 
-// KDE headers
 #include <KActionCollection>
 #include <KConfigDialog>
 
-Kring::Kring()
+#include "kringview.h"
+
+KringWindow::KringWindow()
   : KXmlGuiWindow()
 {
   kringView = new KringView(this);
   setCentralWidget(kringView);
-  switchAction = actionCollection()->addAction(QStringLiteral("switch_action"),
-                                               this,
-                                               SLOT(slotSwitchColors()));
+  switchAction
+      = actionCollection()->addAction(QStringLiteral("switch_action"));
   switchAction->setText(i18n("Switch Colors"));
   switchAction->setIcon(QIcon::fromTheme(QStringLiteral("fill-color")));
   connect(switchAction,
-          SIGNAL(triggered(bool)),
+          &QAction::triggered,
           kringView,
-          SLOT(slotSwitchColors()));
-  KStandardAction::openNew(this, SLOT(fileNew()), actionCollection());
-  KStandardAction::quit(qApp, SLOT(closeAllWindows()), actionCollection());
+          &KringView::slotSwitchColors);
+  KStandardAction::quit(qApp,
+                        &QApplication::closeAllWindows,
+                        actionCollection());
   KStandardAction::preferences(this,
-                               SLOT(settingsConfigure()),
+                               &KringWindow::settingsConfigure,
                                actionCollection());
   setupGUI();
 }
 
-Kring::~Kring()
+KringWindow::~KringWindow()
 {
+  ;
 }
 
-void Kring::fileNew()
+void KringWindow::settingsConfigure()
 {
-  qCDebug(KRING) << "Kring::fileNew()";
-  (new Kring)->show();
-}
-
-void Kring::settingsConfigure()
-{
-  qCDebug(KRING) << "Kring::settingsConfigure()";
+  qCDebug(KRING) << "KringWindow::settingsConfigure()";
   // The preference dialog is derived from prefs_base.ui
   //
   // compare the names of the widgets in the .ui file
@@ -77,9 +72,11 @@ void Kring::settingsConfigure()
                   i18n("General"),
                   QStringLiteral("package_setting"));
   connect(dialog,
-          SIGNAL(settingsChanged(QString)),
+          &KConfigDialog::settingsChanged,
           kringView,
-          SLOT(slotSettingsChanged()));
+          &KringView::slotSettingsChanged);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
   dialog->show();
+
+  return;
 }

@@ -18,49 +18,45 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef KRING_H
-#define KRING_H
+#ifndef KRINGWINDOW_H
+#define KRINGWINDOW_H
 
 #include <QLoggingCategory>
 
 #include <KXmlGuiWindow>
 
-#include "kringsettings.h"
-#include "kringview.h"
-
-#include "ui_kringviewbase.h"
 #include "ui_settingsbase.h"
+
+#include "kringsettings.h"
+
+class KringView;
 
 Q_DECLARE_LOGGING_CATEGORY(KRING)
 
 /**
- * This class serves as the main window for kring.  It handles the
+ * This class serves as the main window for kring. It handles the
  * menus, toolbars and status bars.
  *
  * @short Main window class
  * @author Marat Moustafine <moustafine@tuta.io>
  * @version 0.1
  */
-class Kring : public KXmlGuiWindow
+class KringWindow : public KXmlGuiWindow
 {
   Q_OBJECT
+
 public:
   /**
    * Default Constructor
    */
-  Kring();
+  KringWindow();
 
   /**
    * Default Destructor
    */
-  virtual ~Kring();
+  virtual ~KringWindow();
 
 private slots:
-  /**
-   * Create a new window
-   */
-  void fileNew();
-
   /**
    * Open the settings dialog
    */
@@ -70,9 +66,8 @@ private:
   // this is the name of the root widget inside our Ui file
   // you can rename it in designer and then change it here
   Ui::SettingsBase settingsBase;
-  Ui::KringViewBase kringViewBase;
   QAction * switchAction;
   KringView * kringView;
 };
 
-#endif // KRING_H
+#endif // KRINGWINDOW_H
