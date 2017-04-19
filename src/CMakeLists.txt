@@ -1,7 +1,8 @@
 set(kring_SRCS
-  main.cpp
   kring.cpp
+  kringapplication.cpp
   kringview.cpp
+  main.cpp
 )
 
 kconfig_add_kcfg_files(kring_SRCS kringsettings.kcfgc)
@@ -11,10 +12,12 @@ add_executable(kring ${kring_SRCS})
 
 target_link_libraries(kring
   Qt5::Widgets
-  KF5::CoreAddons
-  KF5::I18n
-  KF5::XmlGui
   KF5::ConfigWidgets
+  KF5::CoreAddons
+  KF5::DBusAddons
+  KF5::I18n
+  KF5::WindowSystem
+  KF5::XmlGui
 )
 
 install(TARGETS kring ${INSTALL_TARGETS_DEFAULT_ARGS})
