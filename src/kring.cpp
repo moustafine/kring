@@ -39,7 +39,6 @@ Kring::Kring()
           SIGNAL(triggered(bool)),
           kringView,
           SLOT(slotSwitchColors()));
-  KStandardAction::openNew(this, SLOT(fileNew()), actionCollection());
   KStandardAction::quit(qApp, SLOT(closeAllWindows()), actionCollection());
   KStandardAction::preferences(this,
                                SLOT(settingsConfigure()),
@@ -49,12 +48,6 @@ Kring::Kring()
 
 Kring::~Kring()
 {
-}
-
-void Kring::fileNew()
-{
-  qCDebug(KRING) << "Kring::fileNew()";
-  (new Kring)->show();
 }
 
 void Kring::settingsConfigure()

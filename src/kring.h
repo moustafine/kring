@@ -57,11 +57,6 @@ public:
 
 private slots:
   /**
-   * Create a new window
-   */
-  void fileNew();
-
-  /**
    * Open the settings dialog
    */
   void settingsConfigure();
