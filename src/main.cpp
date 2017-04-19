@@ -40,11 +40,11 @@ int main(int argc, char ** argv)
 
   KLocalizedString::setApplicationDomain("kring");
   KAboutData aboutData(QStringLiteral("kring"),
-                       i18n("Simple App"),
+                       i18n("Kring"),
                        QStringLiteral("0.1"),
-                       i18n("A Simple Application written with KDE Frameworks"),
+                       i18n("A client for Ring"),
                        KAboutLicense::GPL,
-                       i18n("(c) 2017, Marat Moustafine <moustafine@tuta.io>"));
+                       i18n("(c) 2017, Marat Moustafine"));
 
   aboutData.addAuthor(i18n("Marat Moustafine"),
                       i18n("Author"),
