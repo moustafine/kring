@@ -22,12 +22,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <KActionCollection>
 #include <KConfigDialog>
+#include <KStatusNotifierItem>
 
 #include "kringview.h"
 
 KringWindow::KringWindow()
   : KXmlGuiWindow()
 {
+  systemTrayIcon = new KStatusNotifierItem(this);
+  systemTrayIcon->setCategory(KStatusNotifierItem::ApplicationStatus);
+  systemTrayIcon->setIconByName("kring");
+  systemTrayIcon->setToolTip("kring",
+                             i18n("Kring"),
+                             i18n("A client for Ring"));
+
   kringView = new KringView(this);
   setCentralWidget(kringView);
   switchAction

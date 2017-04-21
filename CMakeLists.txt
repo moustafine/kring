@@ -20,6 +20,7 @@ find_package(KF5 REQUIRED COMPONENTS
   DBusAddons
   DocTools
   I18n
+  Notifications
   WindowSystem
   XmlGui
 )

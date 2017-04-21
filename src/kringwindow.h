@@ -29,6 +29,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "kringsettings.h"
 
+class KStatusNotifierItem;
+
 class KringView;
 
 Q_DECLARE_LOGGING_CATEGORY(KRING)
@@ -63,11 +65,12 @@ private slots:
   void settingsConfigure();
 
 private:
-  // this is the name of the root widget inside our Ui file
-  // you can rename it in designer and then change it here
+  KringView * kringView = nullptr;
+  KStatusNotifierItem * systemTrayIcon = nullptr;
+
   Ui::SettingsBase settingsBase;
-  QAction * switchAction;
-  KringView * kringView;
+
+  QAction * switchAction = nullptr;
 };
 
 #endif // KRINGWINDOW_H
