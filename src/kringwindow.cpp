@@ -24,18 +24,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KConfigDialog>
 #include <KStatusNotifierItem>
 
+#include "kringsettings.h"
 #include "kringview.h"
 
 KringWindow::KringWindow()
   : KXmlGuiWindow()
 {
-  systemTrayIcon = new KStatusNotifierItem(this);
-  systemTrayIcon->setCategory(KStatusNotifierItem::ApplicationStatus);
-  systemTrayIcon->setIconByName("kring");
-  systemTrayIcon->setToolTip("kring",
-                             i18n("Kring"),
-                             i18n("A client for Ring"));
-
   kringView = new KringView(this);
   setCentralWidget(kringView);
   switchAction
@@ -50,9 +44,10 @@ KringWindow::KringWindow()
                         &QApplication::closeAllWindows,
                         actionCollection());
   KStandardAction::preferences(this,
-                               &KringWindow::settingsConfigure,
+                               &KringWindow::showSettingsDialog,
                                actionCollection());
   setupGUI();
+  loadSettings();
 }
 
 KringWindow::~KringWindow()
@@ -60,9 +55,9 @@ KringWindow::~KringWindow()
   ;
 }
 
-void KringWindow::settingsConfigure()
+void KringWindow::showSettingsDialog()
 {
-  qCDebug(KRING) << "KringWindow::settingsConfigure()";
+  qCDebug(KRING) << "KringWindow::showSettingsDialog()";
   // The preference dialog is derived from prefs_base.ui
   //
   // compare the names of the widgets in the .ui file
@@ -78,13 +73,37 @@ void KringWindow::settingsConfigure()
   settingsBase.setupUi(generalSettingsDialog);
   dialog->addPage(generalSettingsDialog,
                   i18n("General"),
-                  QStringLiteral("package_setting"));
+                  QStringLiteral("preferences-system-windows"));
   connect(dialog,
           &KConfigDialog::settingsChanged,
-          kringView,
-          &KringView::slotSettingsChanged);
+          this,
+          &KringWindow::loadSettings);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
   dialog->show();
+
+  return;
+}
+
+void KringWindow::loadSettings()
+{
+  if (KringSettings::systemTrayIconEnabled()) {
+    if (!systemTrayIcon) {
+      systemTrayIcon = new KStatusNotifierItem(this);
+      systemTrayIcon->setCategory(KStatusNotifierItem::ApplicationStatus);
+      systemTrayIcon->setIconByName(QStringLiteral("kring"));
+      systemTrayIcon->setToolTip(QStringLiteral("kring"),
+                                 i18n("Kring"),
+                                 i18n("A client for Ring"));
+    }
+  } else {
+    if (systemTrayIcon) {
+      systemTrayIcon->setParent(nullptr);
+      delete systemTrayIcon;
+      systemTrayIcon = nullptr;
+    }
+  }
+
+  kringView->loadSettings();
 
   return;
 }

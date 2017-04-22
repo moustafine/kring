@@ -59,10 +59,9 @@ public:
   virtual ~KringWindow();
 
 private slots:
-  /**
-   * Open the settings dialog
-   */
-  void settingsConfigure();
+  void showSettingsDialog();
+
+  void loadSettings();
 
 private:
   KringView * kringView = nullptr;
