@@ -37,7 +37,9 @@ KringApplication::KringApplication(int & argc, char ** argv)
           this,
           [this]()
   {
-    KWindowSystem::forceActiveWindow(window->winId());
+    if (window) {
+      KWindowSystem::forceActiveWindow(window->winId());
+    }
     return;
   });
 }
