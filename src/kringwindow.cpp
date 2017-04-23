@@ -55,6 +55,11 @@ KringWindow::~KringWindow()
   ;
 }
 
+const KStatusNotifierItem * KringWindow::getSystemTrayIcon() const
+{
+  return systemTrayIcon;
+}
+
 void KringWindow::showSettingsDialog()
 {
   qCDebug(KRING) << "KringWindow::showSettingsDialog()";

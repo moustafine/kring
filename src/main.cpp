@@ -59,7 +59,7 @@ int main(int argc, char ** argv)
   KAboutData::setApplicationData(aboutData);
 
   KringWindow * window = new KringWindow;
-  window->show();
   application.setMainWindow(window);
+  application.show();
   return application.exec();
 }

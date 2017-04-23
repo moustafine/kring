@@ -58,6 +58,8 @@ public:
    */
   virtual ~KringWindow();
 
+  const KStatusNotifierItem * getSystemTrayIcon() const;
+
 private slots:
   void showSettingsDialog();
 
