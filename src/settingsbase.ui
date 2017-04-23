@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>250</width>
-    <height>225</height>
+    <width>320</width>
+    <height>251</height>
    </rect>
   </property>
   <layout class="QVBoxLayout">
@@ -46,14 +46,28 @@
          </spacer>
         </item>
         <item>
-         <widget class="QCheckBox" name="kcfg_windowHidingOnStart">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="text">
-           <string>Start with hidden main window</string>
-          </property>
-         </widget>
+         <layout class="QVBoxLayout">
+          <item>
+           <widget class="QCheckBox" name="kcfg_windowHidingOnStart">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Start with hidden main window</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="kcfg_windowHidingOnClose">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Hide main window when close button clicked</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </item>
@@ -193,6 +207,22 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>137</x>
      <y>73</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>kcfg_systemTrayIconEnabled</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>kcfg_windowHidingOnClose</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>159</x>
+     <y>47</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>172</x>
+     <y>99</y>
     </hint>
    </hints>
   </connection>

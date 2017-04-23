@@ -13,6 +13,10 @@
       <label>Start with hidden main window</label>
       <default>false</default>
     </entry>
+    <entry name="windowHidingOnClose" type="Bool">
+      <label>Hide main window when close button clicked</label>
+      <default>true</default>
+    </entry>
     <entry name="color_background" type="Color">
       <label>color of the background</label>
       <default>black</default>

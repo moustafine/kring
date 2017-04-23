@@ -60,6 +60,9 @@ public:
 
   const KStatusNotifierItem * getSystemTrayIcon() const;
 
+protected:
+  bool queryClose() override;
+
 private slots:
   void showSettingsDialog();
 

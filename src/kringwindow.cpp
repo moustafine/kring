@@ -41,7 +41,7 @@ KringWindow::KringWindow()
           kringView,
           &KringView::slotSwitchColors);
   KStandardAction::quit(qApp,
-                        &QApplication::closeAllWindows,
+                        &QApplication::quit,
                         actionCollection());
   KStandardAction::preferences(this,
                                &KringWindow::showSettingsDialog,
@@ -58,6 +58,19 @@ KringWindow::~KringWindow()
 const KStatusNotifierItem * KringWindow::getSystemTrayIcon() const
 {
   return systemTrayIcon;
+}
+
+bool KringWindow::queryClose()
+{
+  qCDebug(KRING) << "KringWindow::queryClose()";
+  if (KringSettings::systemTrayIconEnabled()
+      && KringSettings::windowHidingOnClose()
+      && systemTrayIcon) {
+    hide();
+    return false;
+  } else {
+    return true;
+  }
 }
 
 void KringWindow::showSettingsDialog()
