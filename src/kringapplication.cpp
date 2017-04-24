@@ -46,13 +46,24 @@ KringApplication::KringApplication(int & argc, char ** argv)
 
 KringApplication::~KringApplication()
 {
-  ;
+  if (window) {
+    delete window;
+  };
 }
 
 void KringApplication::setMainWindow(KringWindow * window)
 {
   if (window) {
     this->window = window;
+
+    connect(window,
+            &KringWindow::destroyed,
+            this,
+            [this]()
+    {
+      this->window = nullptr;
+      return;
+    });
   }
   return;
 }

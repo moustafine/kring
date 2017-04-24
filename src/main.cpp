@@ -58,8 +58,7 @@ int main(int argc, char ** argv)
   aboutData.processCommandLine(&parser);
   KAboutData::setApplicationData(aboutData);
 
-  KringWindow * window = new KringWindow;
-  application.setMainWindow(window);
+  application.setMainWindow(new KringWindow());
   application.show();
   return application.exec();
 }
