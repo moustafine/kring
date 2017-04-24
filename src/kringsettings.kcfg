@@ -17,6 +17,10 @@
       <label>Hide main window when close button clicked</label>
       <default>true</default>
     </entry>
+    <entry name="windowHidingOnMinimize" type="Bool">
+      <label>Hide main window when minimize button clicked</label>
+      <default>false</default>
+    </entry>
     <entry name="color_background" type="Color">
       <label>color of the background</label>
       <default>black</default>

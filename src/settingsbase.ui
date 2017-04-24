@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>320</width>
-    <height>251</height>
+    <width>340</width>
+    <height>276</height>
    </rect>
   </property>
   <layout class="QVBoxLayout">
@@ -64,6 +64,16 @@
             </property>
             <property name="text">
              <string>Hide main window when close button clicked</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="kcfg_windowHidingOnMinimize">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Hide main window when minimize button clicked</string>
             </property>
            </widget>
           </item>
@@ -223,6 +233,22 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>172</x>
      <y>99</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>kcfg_systemTrayIconEnabled</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>kcfg_windowHidingOnMinimize</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>169</x>
+     <y>47</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>182</x>
+     <y>124</y>
     </hint>
    </hints>
   </connection>

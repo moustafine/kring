@@ -20,6 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "kringwindow.h"
 
+#include <QEvent>
+
 #include <KActionCollection>
 #include <KConfigDialog>
 #include <KStatusNotifierItem>
@@ -58,6 +60,19 @@ KringWindow::~KringWindow()
 const KStatusNotifierItem * KringWindow::getSystemTrayIcon() const
 {
   return systemTrayIcon;
+}
+
+bool KringWindow::event(QEvent * event)
+{
+  if (event->type() == QEvent::WindowStateChange
+      && isMinimized()
+      && KringSettings::systemTrayIconEnabled()
+      && KringSettings::windowHidingOnMinimize()
+      && systemTrayIcon) {
+    hide();
+    return true;
+  }
+  return KXmlGuiWindow::event(event);
 }
 
 bool KringWindow::queryClose()

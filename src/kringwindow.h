@@ -29,6 +29,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "kringsettings.h"
 
+class QEvent;
+
 class KStatusNotifierItem;
 
 class KringView;
@@ -61,6 +63,7 @@ public:
   const KStatusNotifierItem * getSystemTrayIcon() const;
 
 protected:
+  bool event(QEvent * event) override;
   bool queryClose() override;
 
 private slots:
