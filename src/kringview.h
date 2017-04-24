@@ -51,7 +51,7 @@ public:
   virtual ~KringView();
 
 public slots:
-  void slotSettingsChanged();
+  void loadSettings();
   void slotSwitchColors();
 
 signals:

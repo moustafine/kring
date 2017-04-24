@@ -34,9 +34,10 @@ public:
   ~KringApplication();
 
   void setMainWindow(KringWindow * window);
+  void show();
 
 private:
-  KringWindow * window;
+  KringWindow * window = nullptr;
 };
 
 #endif // KRINGAPPLICATION_H

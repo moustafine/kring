@@ -23,11 +23,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KDBusService>
 #include <KWindowSystem>
 
+#include "kringsettings.h"
 #include "kringwindow.h"
 
 KringApplication::KringApplication(int & argc, char ** argv)
-  : QApplication(argc, argv),
-    window(nullptr)
+  : QApplication(argc, argv)
 {
   setOrganizationDomain("example.org");
 
@@ -53,6 +53,18 @@ void KringApplication::setMainWindow(KringWindow * window)
 {
   if (window) {
     this->window = window;
+  }
+  return;
+}
+
+void KringApplication::show()
+{
+  if (window) {
+    if (KringSettings::windowHidingOnStart() && window->getSystemTrayIcon()) {
+      window->hide();
+    } else {
+      window->show();
+    }
   }
   return;
 }

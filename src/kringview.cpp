@@ -26,7 +26,6 @@ KringView::KringView(QWidget * parent)
   : QWidget(parent)
 {
   kringViewBase.setupUi(this);
-  slotSettingsChanged();
 }
 
 KringView::~KringView()
@@ -41,14 +40,14 @@ void KringView::slotSwitchColors()
   KringSettings::setColor_background(KringSettings::color_foreground());
   KringSettings::setColor_foreground(color);
 
-  slotSettingsChanged();
+  loadSettings();
 
   return;
 }
 
-void KringView::slotSettingsChanged()
+void KringView::loadSettings()
 {
-  qCDebug(KRING) << "KringView::slotSettingsChanged()";
+  qCDebug(KRING) << "KringView::loadSettings()";
   QPalette palette;
   palette.setColor(QPalette::Window, KringSettings::color_background());
   palette.setColor(QPalette::WindowText, KringSettings::color_foreground());
