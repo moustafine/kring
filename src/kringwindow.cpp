@@ -42,6 +42,9 @@ KringWindow::KringWindow()
           &QAction::triggered,
           kringView,
           &KringView::slotSwitchColors);
+  KStandardAction::close(this,
+                         &KringWindow::close,
+                         actionCollection());
   KStandardAction::quit(qApp,
                         &QApplication::quit,
                         actionCollection());
