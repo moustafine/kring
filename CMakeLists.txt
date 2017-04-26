@@ -33,6 +33,8 @@ find_package(KF5 REQUIRED COMPONENTS
   XmlGui
 )
 
+find_package(LibRingClient REQUIRED)
+
 feature_summary(WHAT ALL
   INCLUDE_QUIET_PACKAGES
   FATAL_ON_MISSING_REQUIRED_PACKAGES
