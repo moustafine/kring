@@ -1,4 +1,5 @@
 set(kring_SRCS
+  accountssettingspage.cpp
   kringapplication.cpp
   kringview.cpp
   kringwindow.cpp
@@ -6,7 +7,11 @@ set(kring_SRCS
 )
 
 kconfig_add_kcfg_files(kring_SRCS kringsettings.kcfgc)
-ki18n_wrap_ui(kring_SRCS kringviewbase.ui settingsbase.ui)
+ki18n_wrap_ui(kring_SRCS
+  accountssettingspage.ui
+  kringviewbase.ui
+  settingsbase.ui
+)
 
 include_directories(${LIB_RING_CLIENT_INCLUDE_DIR})
 

@@ -26,6 +26,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KConfigDialog>
 #include <KStatusNotifierItem>
 
+#include <callmodel.h>
+
+#include "accountssettingspage.h"
 #include "kringsettings.h"
 #include "kringview.h"
 
@@ -57,7 +60,7 @@ KringWindow::KringWindow()
 
 KringWindow::~KringWindow()
 {
-  ;
+  delete &CallModel::instance();
 }
 
 const KStatusNotifierItem * KringWindow::getSystemTrayIcon() const
@@ -110,6 +113,11 @@ void KringWindow::showSettingsDialog()
   dialog->addPage(generalSettingsDialog,
                   i18n("General"),
                   QStringLiteral("preferences-system-windows"));
+
+  dialog->addPage(new AccountsSettingsPage(),
+                  i18n("Accounts"),
+                  QStringLiteral("system-users"));
+
   connect(dialog,
           &KConfigDialog::settingsChanged,
           this,
