@@ -18,47 +18,18 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef KRINGWINDOW_H
-#define KRINGWINDOW_H
+#include "generalsettingspage.h"
 
-#include <QLoggingCategory>
+#include "ui_generalsettingspage.h"
 
-#include <KXmlGuiWindow>
-
-#include "kringsettings.h"
-
-class QEvent;
-
-class KStatusNotifierItem;
-
-class KringWidget;
-
-Q_DECLARE_LOGGING_CATEGORY(KRING)
-
-class KringWindow : public KXmlGuiWindow
+GeneralSettingsPage::GeneralSettingsPage(QWidget * parent)
+  : QWidget(parent)
 {
-  Q_OBJECT
+  ui = new Ui::GeneralSettingsPage();
+  ui->setupUi(this);
+}
 
-public:
-  KringWindow();
-  ~KringWindow();
-
-  const KStatusNotifierItem * getSystemTrayIcon() const;
-
-protected:
-  bool event(QEvent * event) override;
-  bool queryClose() override;
-
-private slots:
-  void showSettingsDialog();
-
-  void loadSettings();
-
-private:
-  KringWidget * kringWidget = nullptr;
-  KStatusNotifierItem * systemTrayIcon = nullptr;
-
-  QAction * switchAction = nullptr;
-};
-
-#endif // KRINGWINDOW_H
+GeneralSettingsPage::~GeneralSettingsPage()
+{
+  delete ui;
+}

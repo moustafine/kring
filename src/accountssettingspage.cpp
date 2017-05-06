@@ -28,7 +28,6 @@ AccountsSettingsPage::AccountsSettingsPage(QWidget * parent)
   : QWidget(parent)
 {
   ui = new Ui::AccountsSettingsPage();
-
   ui->setupUi(this);
 
   ui->accountListView->setModel(&AccountModel::instance());

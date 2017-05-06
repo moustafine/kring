@@ -18,37 +18,25 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef KRINGVIEW_H
-#define KRINGVIEW_H
+#ifndef KRINGWIDGET_H
+#define KRINGWIDGET_H
 
 #include <QLoggingCategory>
+#include <QWidget>
 
-#include "ui_kringviewbase.h"
+namespace Ui {
+class KringWidget;
+}
 
 Q_DECLARE_LOGGING_CATEGORY(KRING)
 
-/**
- * This class serves as the main window for kring.  It handles the
- * menus, toolbars and status bars.
- *
- * @short Main window class
- * @author Marat Moustafine <moustafine@tuta.io>
- * @version 0.1
- */
-class KringView : public QWidget
+class KringWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  /**
-   * Default Constructor
-   */
-  explicit KringView(QWidget * parent);
-
-  /**
-   * Default Destructor
-   */
-  virtual ~KringView();
+  explicit KringWidget(QWidget * parent = nullptr);
+  ~KringWidget();
 
 public slots:
   void loadSettings();
@@ -66,9 +54,7 @@ signals:
   void signalChangeCaption(const QString & text);
 
 private:
-  // this is the name of the root widget inside our Ui file
-  // you can rename it in designer and then change it here
-  Ui::KringViewBase kringViewBase;
+  Ui::KringWidget * ui = nullptr;
 };
 
-#endif // KRINGVIEW_H
+#endif // KRINGWIDGET_H

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>KringViewBase</class>
- <widget class="QWidget" name="KringViewBase">
+ <class>KringWidget</class>
+ <widget class="QWidget" name="KringWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -9,9 +9,6 @@
     <width>315</width>
     <height>233</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string>kring_base</string>
   </property>
   <property name="autoFillBackground">
    <bool>true</bool>

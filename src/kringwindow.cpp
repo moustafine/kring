@@ -24,32 +24,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <KActionCollection>
 #include <KConfigDialog>
+#include <KLocalizedString>
 #include <KStatusNotifierItem>
 
 #include <callmodel.h>
 
 #include "accountssettingspage.h"
+#include "generalsettingspage.h"
 #include "kringsettings.h"
-#include "kringview.h"
+#include "kringwidget.h"
 
 KringWindow::KringWindow()
   : KXmlGuiWindow()
 {
-  kringView = new KringView(this);
-  setCentralWidget(kringView);
+  kringWidget = new KringWidget(this);
+  setCentralWidget(kringWidget);
   switchAction
       = actionCollection()->addAction(QStringLiteral("switch_action"));
   switchAction->setText(i18n("Switch Colors"));
   switchAction->setIcon(QIcon::fromTheme(QStringLiteral("fill-color")));
   connect(switchAction,
           &QAction::triggered,
-          kringView,
-          &KringView::slotSwitchColors);
+          kringWidget,
+          &KringWidget::slotSwitchColors);
   KStandardAction::close(this,
                          &KringWindow::close,
                          actionCollection());
   KStandardAction::quit(qApp,
-                        &QApplication::quit,
+                        &QCoreApplication::quit,
                         actionCollection());
   KStandardAction::preferences(this,
                                &KringWindow::showSettingsDialog,
@@ -97,33 +99,29 @@ bool KringWindow::queryClose()
 void KringWindow::showSettingsDialog()
 {
   qCDebug(KRING) << "KringWindow::showSettingsDialog()";
-  // The preference dialog is derived from prefs_base.ui
-  //
-  // compare the names of the widgets in the .ui file
-  // to the names of the variables in the .kcfg file
-  //avoid to have 2 dialogs shown
+
   if (KConfigDialog::showDialog(QStringLiteral("settings"))) {
     return;
   }
-  KConfigDialog * dialog = new KConfigDialog(this,
-                                             QStringLiteral("settings"),
-                                             KringSettings::self());
-  QWidget * generalSettingsDialog = new QWidget;
-  settingsBase.setupUi(generalSettingsDialog);
-  dialog->addPage(generalSettingsDialog,
-                  i18n("General"),
-                  QStringLiteral("preferences-system-windows"));
 
-  dialog->addPage(new AccountsSettingsPage(),
-                  i18n("Accounts"),
-                  QStringLiteral("system-users"));
+  KConfigDialog * settingsDialog
+      = new KConfigDialog(this,
+                          QStringLiteral("settings"),
+                          KringSettings::self());
+  settingsDialog->addPage(new GeneralSettingsPage(),
+                          i18n("General"),
+                          QStringLiteral("preferences-system-windows"));
+  settingsDialog->addPage(new AccountsSettingsPage(),
+                          i18n("Accounts"),
+                          QStringLiteral("system-users"));
 
-  connect(dialog,
+  connect(settingsDialog,
           &KConfigDialog::settingsChanged,
           this,
           &KringWindow::loadSettings);
-  dialog->setAttribute(Qt::WA_DeleteOnClose);
-  dialog->show();
+
+  settingsDialog->setAttribute(Qt::WA_DeleteOnClose);
+  settingsDialog->show();
 
   return;
 }
@@ -147,7 +145,7 @@ void KringWindow::loadSettings()
     }
   }
 
-  kringView->loadSettings();
+  kringWidget->loadSettings();
 
   return;
 }

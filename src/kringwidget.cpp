@@ -18,22 +18,25 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "kringview.h"
+#include "kringwidget.h"
+
+#include "ui_kringwidget.h"
 
 #include "kringsettings.h"
 
-KringView::KringView(QWidget * parent)
+KringWidget::KringWidget(QWidget * parent)
   : QWidget(parent)
 {
-  kringViewBase.setupUi(this);
+  ui = new Ui::KringWidget();
+  ui->setupUi(this);
 }
 
-KringView::~KringView()
+KringWidget::~KringWidget()
 {
-  ;
+  delete ui;
 }
 
-void KringView::slotSwitchColors()
+void KringWidget::slotSwitchColors()
 {
   // switch the foreground/background colors of the label
   QColor color = KringSettings::color_background();
@@ -45,16 +48,17 @@ void KringView::slotSwitchColors()
   return;
 }
 
-void KringView::loadSettings()
+void KringWidget::loadSettings()
 {
-  qCDebug(KRING) << "KringView::loadSettings()";
+  qCDebug(KRING) << "KringWidget::loadSettings()";
   QPalette palette;
   palette.setColor(QPalette::Window, KringSettings::color_background());
   palette.setColor(QPalette::WindowText, KringSettings::color_foreground());
-  kringViewBase.templateLabel->setPalette(palette);
+  ui->templateLabel->setPalette(palette);
 
   // i18n : internationalization
-  kringViewBase.templateLabel->setText(i18n("This project is %1 days old", KringSettings::val_time()));
+  ui->templateLabel->setText(i18n("This project is %1 days old",
+                                  KringSettings::val_time()));
   emit signalChangeStatusbar(i18n("Settings changed"));
 
   return;
