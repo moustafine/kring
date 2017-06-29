@@ -18,34 +18,39 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "accountssettingspage.h"
+#ifndef FINISHPAGE_H
+#define FINISHPAGE_H
 
-#include <accountmodel.h>
+#include <QWidget>
 
-#include "ui_accountssettingspage.h"
+class QLayoutItem;
 
-#include "accountassistantdialog.h"
-
-AccountsSettingsPage::AccountsSettingsPage(QWidget * parent)
-  : QWidget(parent)
-{
-  ui = new Ui::AccountsSettingsPage();
-  ui->setupUi(this);
-
-  ui->accountListView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-  ui->accountListView->setModel(&AccountModel::instance());
+namespace Ui {
+class FinishPage;
 }
 
-AccountsSettingsPage::~AccountsSettingsPage()
+class FinishPage : public QWidget
 {
-  delete ui;
-}
+  Q_OBJECT
 
-void AccountsSettingsPage::on_addPushButton_clicked()
-{
-  accountAssistantDialog = new AccountAssistantDialog(this);
-  accountAssistantDialog->setAttribute(Qt::WA_DeleteOnClose);
-  accountAssistantDialog->show();
+public:
+  explicit FinishPage(QWidget * parent = nullptr);
+  ~FinishPage();
 
-  return;
-}
+public:
+  void addWidget(QWidget * widget,
+                 int stretch = 0,
+                 Qt::Alignment alignment = Qt::Alignment());
+  void addItem(QLayoutItem * layoutItem);
+
+  void insertWidget(int index,
+                    QWidget * widget,
+                    int stretch = 0,
+                    Qt::Alignment alignment = Qt::Alignment());
+  void insertItem(int index, QLayoutItem * layoutItem);
+
+private:
+  Ui::FinishPage * ui = nullptr;
+};
+
+#endif // FINISHPAGE_H

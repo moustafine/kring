@@ -18,34 +18,25 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "accountssettingspage.h"
+#ifndef PROGRESSPAGE_H
+#define PROGRESSPAGE_H
 
-#include <accountmodel.h>
+#include <QWidget>
 
-#include "ui_accountssettingspage.h"
-
-#include "accountassistantdialog.h"
-
-AccountsSettingsPage::AccountsSettingsPage(QWidget * parent)
-  : QWidget(parent)
-{
-  ui = new Ui::AccountsSettingsPage();
-  ui->setupUi(this);
-
-  ui->accountListView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-  ui->accountListView->setModel(&AccountModel::instance());
+namespace Ui {
+class ProgressPage;
 }
 
-AccountsSettingsPage::~AccountsSettingsPage()
+class ProgressPage : public QWidget
 {
-  delete ui;
-}
+  Q_OBJECT
 
-void AccountsSettingsPage::on_addPushButton_clicked()
-{
-  accountAssistantDialog = new AccountAssistantDialog(this);
-  accountAssistantDialog->setAttribute(Qt::WA_DeleteOnClose);
-  accountAssistantDialog->show();
+public:
+  explicit ProgressPage(QWidget * parent = nullptr);
+  ~ProgressPage();
 
-  return;
-}
+private:
+  Ui::ProgressPage * ui = nullptr;
+};
+
+#endif // PROGRESSPAGE_H

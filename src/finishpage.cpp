@@ -18,34 +18,50 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "accountssettingspage.h"
+#include "finishpage.h"
 
-#include <accountmodel.h>
+#include <QLayoutItem>
+#include <QVBoxLayout>
 
-#include "ui_accountssettingspage.h"
+#include "ui_finishpage.h"
 
-#include "accountassistantdialog.h"
-
-AccountsSettingsPage::AccountsSettingsPage(QWidget * parent)
+FinishPage::FinishPage(QWidget * parent)
   : QWidget(parent)
 {
-  ui = new Ui::AccountsSettingsPage();
+  ui = new Ui::FinishPage();
   ui->setupUi(this);
-
-  ui->accountListView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-  ui->accountListView->setModel(&AccountModel::instance());
 }
 
-AccountsSettingsPage::~AccountsSettingsPage()
+FinishPage::~FinishPage()
 {
   delete ui;
 }
 
-void AccountsSettingsPage::on_addPushButton_clicked()
+void FinishPage::addWidget(QWidget * widget,
+                           int stretch,
+                           Qt::Alignment alignment)
 {
-  accountAssistantDialog = new AccountAssistantDialog(this);
-  accountAssistantDialog->setAttribute(Qt::WA_DeleteOnClose);
-  accountAssistantDialog->show();
+  ui->vboxLayout->addWidget(widget, stretch, alignment);
+  return;
+}
 
+void FinishPage::addItem(QLayoutItem * layoutItem)
+{
+  ui->vboxLayout->addItem(layoutItem);
+  return;
+}
+
+void FinishPage::insertWidget(int index,
+                              QWidget * widget,
+                              int stretch,
+                              Qt::Alignment alignment)
+{
+  ui->vboxLayout->insertWidget(index, widget, stretch, alignment);
+  return;
+}
+
+void FinishPage::insertItem(int index, QLayoutItem * layoutItem)
+{
+  ui->vboxLayout->insertItem(index, layoutItem);
   return;
 }

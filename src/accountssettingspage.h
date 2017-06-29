@@ -27,6 +27,8 @@ namespace Ui {
 class AccountsSettingsPage;
 }
 
+class AccountAssistantDialog;
+
 class AccountsSettingsPage : public QWidget
 {
   Q_OBJECT
@@ -35,8 +37,13 @@ public:
   explicit AccountsSettingsPage(QWidget * parent = nullptr);
   ~AccountsSettingsPage();
 
+private slots:
+  void on_addPushButton_clicked();
+
 private:
   Ui::AccountsSettingsPage * ui = nullptr;
+
+  AccountAssistantDialog * accountAssistantDialog = nullptr;
 };
 
 #endif // ACCOUNTSSETTINGSPAGE_H
