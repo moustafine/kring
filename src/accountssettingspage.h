@@ -39,6 +39,10 @@ public:
 
 private slots:
   void on_addPushButton_clicked();
+  void on_deletePushButton_clicked();
+
+  void handleCurrentAccountIndexChange(const QModelIndex & currentIndex,
+                                       const QModelIndex & previousIndex);
 
 private:
   Ui::AccountsSettingsPage * ui = nullptr;

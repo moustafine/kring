@@ -20,6 +20,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "accountssettingspage.h"
 
+#include <QItemSelectionModel>
+#include <QListView>
+#include <QModelIndex>
+
+#include <KLocalizedString>
+#include <KMessageBox>
+
+#include <account.h>
 #include <accountmodel.h>
 
 #include "ui_accountssettingspage.h"
@@ -34,6 +42,31 @@ AccountsSettingsPage::AccountsSettingsPage(QWidget * parent)
 
   ui->accountListView->setEditTriggers(QAbstractItemView::NoEditTriggers);
   ui->accountListView->setModel(&AccountModel::instance());
+
+  connect(ui->accountListView->selectionModel(),
+          &QItemSelectionModel::currentChanged,
+          this,
+          &AccountsSettingsPage::handleCurrentAccountIndexChange);
+
+  auto currentIndex = ui->accountListView->currentIndex();
+  handleCurrentAccountIndexChange(currentIndex, currentIndex);
+
+  connect(&AccountModel::instance(),
+          &AccountModel::accountStateChanged,
+          this,
+          [this](Account * account,  const Account::RegistrationState state)
+  {
+    Q_UNUSED(state);
+
+    auto currentIndex = ui->accountListView->currentIndex();
+
+    if (account
+        == AccountModel::instance().getAccountByModelIndex(currentIndex)) {
+      handleCurrentAccountIndexChange(currentIndex, currentIndex);
+    }
+
+    return;
+  });
 }
 
 AccountsSettingsPage::~AccountsSettingsPage()
@@ -46,6 +79,59 @@ void AccountsSettingsPage::on_addPushButton_clicked()
   accountAssistantDialog = new AccountAssistantDialog(this);
   accountAssistantDialog->setAttribute(Qt::WA_DeleteOnClose);
   accountAssistantDialog->show();
+
+  return;
+}
+
+void AccountsSettingsPage::on_deletePushButton_clicked()
+{
+  auto account = AccountModel::instance()
+      .getAccountByModelIndex(ui->accountListView->currentIndex());
+
+  auto buttonCode
+      = KMessageBox::warningContinueCancel(this,
+                                           i18n("Do you want to delete"
+                                                " account \"%1\"?",
+                                                account->alias()),
+                                           i18n("Account deletion"),
+                                           KStandardGuiItem::del(),
+                                           KStandardGuiItem::cancel());
+
+  if (buttonCode == KMessageBox::Continue) {
+    AccountModel::instance().remove(account);
+    AccountModel::instance().save();
+
+    ui->accountListView->setCurrentIndex(AccountModel::instance().index(0, 0));
+  }
+
+  return;
+}
+
+void AccountsSettingsPage::handleCurrentAccountIndexChange
+(const QModelIndex & currentIndex, const QModelIndex & previousIndex)
+{
+  Q_UNUSED(previousIndex);
+
+  if (currentIndex.isValid()) {
+    auto registrationState = AccountModel::instance()
+        .getAccountByModelIndex(currentIndex)->registrationState();
+
+    switch (registrationState) {
+      case Account::RegistrationState::INITIALIZING:
+      case Account::RegistrationState::COUNT__:
+      {
+        ui->deletePushButton->setEnabled(false);
+        break;
+      }
+      default:
+      {
+        ui->deletePushButton->setEnabled(true);
+        break;
+      }
+    }
+  } else {
+    ui->deletePushButton->setEnabled(false);
+  }
 
   return;
 }
