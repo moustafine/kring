@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef RINGACCOUNTCREDENTIALSPAGE_H
 #define RINGACCOUNTCREDENTIALSPAGE_H
 
-#include <QWidget>
+#include "abstractsettingspage.h"
 
 #include <namedirectory.h>
 
@@ -33,7 +33,7 @@ namespace Ui {
 class RingAccountCredentialsPage;
 }
 
-class RingAccountCredentialsPage : public QWidget
+class RingAccountCredentialsPage : public AbstractSettingsPage
 {
   Q_OBJECT
 
@@ -41,17 +41,21 @@ public:
   explicit RingAccountCredentialsPage(QWidget * parent = nullptr);
   ~RingAccountCredentialsPage();
 
-signals:
-  void valid(QWidget * page, bool valid);
-
 public:
-  void updateUi();
+  bool isValid() const override;
+  void validate() override;
 
   QString getFullName() const;
   QString getUserName() const;
   QString getPassword() const;
 
   bool isPublicUserNameRegistrationRequested() const;
+
+signals:
+  void valid(QWidget * page, bool valid);
+
+private:
+  void updateUi();
 
 private slots:
   void validateUserName();

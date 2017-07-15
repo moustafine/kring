@@ -1,4 +1,5 @@
 set(kring_SRCS
+  abstractsettingspage.cpp
   accountassistantdialog.cpp
   accountssettingspage.cpp
   finishpage.cpp

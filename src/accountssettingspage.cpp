@@ -54,7 +54,7 @@ AccountsSettingsPage::AccountsSettingsPage(QWidget * parent)
   connect(&AccountModel::instance(),
           &AccountModel::accountStateChanged,
           this,
-          [this](Account * account,  const Account::RegistrationState state)
+          [this](Account * account, const Account::RegistrationState state)
   {
     Q_UNUSED(state);
 
@@ -76,7 +76,7 @@ AccountsSettingsPage::~AccountsSettingsPage()
 
 void AccountsSettingsPage::on_addPushButton_clicked()
 {
-  accountAssistantDialog = new AccountAssistantDialog(this);
+  auto accountAssistantDialog = new AccountAssistantDialog(this);
   accountAssistantDialog->setAttribute(Qt::WA_DeleteOnClose);
   accountAssistantDialog->show();
 

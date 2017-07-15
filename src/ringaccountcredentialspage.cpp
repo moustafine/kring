@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ui_ringaccountcredentialspage.h"
 
 RingAccountCredentialsPage::RingAccountCredentialsPage(QWidget * parent)
-  : QWidget(parent)
+  : AbstractSettingsPage(parent)
 {
   ui = new Ui::RingAccountCredentialsPage();
   ui->setupUi(this);
@@ -44,17 +44,16 @@ RingAccountCredentialsPage::RingAccountCredentialsPage(QWidget * parent)
 
   QRegularExpression userNameRegularExpression
       (QStringLiteral("[A-Za-z0-9]+(-?[A-Za-z0-9]+)*"));
-  QValidator * validUserNameator
+  QValidator * userNameValidator
       = new QRegularExpressionValidator(userNameRegularExpression, this);
-  ui->userNameLineEdit->setValidator(validUserNameator);
+  ui->userNameLineEdit->setValidator(userNameValidator);
   ui->userNameLineEdit->setText(qgetenv("USER"));
-
-  validateUserName();
 
   connect(ui->userNameLineEdit,
           &QLineEdit::textEdited,
           this,
           &RingAccountCredentialsPage::validateUserName);
+  validateUserName();
 
   ui->searchingStateLabel
       ->setVisible(ui->registerPublicUserNameCheckBox->isChecked());
@@ -73,11 +72,45 @@ RingAccountCredentialsPage::RingAccountCredentialsPage(QWidget * parent)
           &QLineEdit::textEdited,
           this,
           &RingAccountCredentialsPage::validatePassword);
+  validatePassword();
 }
 
 RingAccountCredentialsPage::~RingAccountCredentialsPage()
 {
   delete ui;
+}
+
+bool RingAccountCredentialsPage::isValid() const
+{
+    return validUserName && validPassword && validConfirmPassword;
+}
+
+void RingAccountCredentialsPage::validate()
+{
+  validateUserName();
+  validatePassword();
+
+  return;
+}
+
+QString RingAccountCredentialsPage::getFullName() const
+{
+  return ui->fullNameLineEdit->text();
+}
+
+QString RingAccountCredentialsPage::getUserName() const
+{
+  return ui->userNameLineEdit->text();
+}
+
+QString RingAccountCredentialsPage::getPassword() const
+{
+  return ui->passwordLineEdit->text();
+}
+
+bool RingAccountCredentialsPage::isPublicUserNameRegistrationRequested() const
+{
+  return ui->registerPublicUserNameCheckBox->isChecked();
 }
 
 void RingAccountCredentialsPage::updateUi()
@@ -113,35 +146,13 @@ void RingAccountCredentialsPage::updateUi()
                   + QStringLiteral("}"));
   }
 
-  if (!validUserName || !validPassword || !validConfirmPassword) {
+  if (validUserName && validPassword && validConfirmPassword) {
+    emit valid(this, true);
+  } else {
     emit valid(this, false);
-
-    return;
   }
 
-  emit valid(this, true);
-
   return;
-}
-
-QString RingAccountCredentialsPage::getFullName() const
-{
-  return ui->fullNameLineEdit->text();
-}
-
-QString RingAccountCredentialsPage::getUserName() const
-{
-  return ui->userNameLineEdit->text();
-}
-
-QString RingAccountCredentialsPage::getPassword() const
-{
-  return ui->passwordLineEdit->text();
-}
-
-bool RingAccountCredentialsPage::isPublicUserNameRegistrationRequested() const
-{
-  return ui->registerPublicUserNameCheckBox->isChecked();
 }
 
 void RingAccountCredentialsPage::validateUserName()

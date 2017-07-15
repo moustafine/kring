@@ -18,32 +18,15 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ACCOUNTSSETTINGSPAGE_H
-#define ACCOUNTSSETTINGSPAGE_H
+#include "abstractsettingspage.h"
 
-#include <QWidget>
-
-namespace Ui {
-class AccountsSettingsPage;
+AbstractSettingsPage::AbstractSettingsPage(QWidget * parent)
+  : QWidget(parent)
+{
+  ;
 }
 
-class AccountsSettingsPage : public QWidget
+AbstractSettingsPage::~AbstractSettingsPage()
 {
-  Q_OBJECT
-
-public:
-  explicit AccountsSettingsPage(QWidget * parent = nullptr);
-  ~AccountsSettingsPage();
-
-private slots:
-  void on_addPushButton_clicked();
-  void on_deletePushButton_clicked();
-
-  void handleCurrentAccountIndexChange(const QModelIndex & currentIndex,
-                                       const QModelIndex & previousIndex);
-
-private:
-  Ui::AccountsSettingsPage * ui = nullptr;
-};
-
-#endif // ACCOUNTSSETTINGSPAGE_H
+  ;
+}

@@ -51,7 +51,7 @@ AccountAssistantDialog::AccountAssistantDialog(QWidget * parent,
           &RingAccountCredentialsPage::valid,
           this,
           &AccountAssistantDialog::setValidPage);
-  ringAccountCredentialsPage->updateUi();
+  ringAccountCredentialsPage->validate();
 
   progressPageItem = addPage(new ProgressPage(), i18n("Progress"));
   setValid(progressPageItem, false);
