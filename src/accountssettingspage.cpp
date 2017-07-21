@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QItemSelectionModel>
 #include <QListView>
+#include <QLoggingCategory>
 #include <QModelIndex>
 
 #include <KLocalizedString>
@@ -33,6 +34,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ui_accountssettingspage.h"
 
 #include "accountassistantdialog.h"
+
+Q_DECLARE_LOGGING_CATEGORY(KRING)
 
 AccountsSettingsPage::AccountsSettingsPage(QWidget * parent)
   : QWidget(parent)
@@ -87,6 +90,11 @@ void AccountsSettingsPage::on_deletePushButton_clicked()
 {
   auto account = AccountModel::instance()
       .getAccountByModelIndex(ui->accountListView->currentIndex());
+
+  if (!account) {
+    qCCritical(KRING, "Failed to get account.");
+    return;
+  }
 
   auto buttonCode
       = KMessageBox::warningContinueCancel(this,
