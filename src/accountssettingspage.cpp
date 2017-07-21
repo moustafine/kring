@@ -24,7 +24,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QListView>
 #include <QLoggingCategory>
 #include <QModelIndex>
+#include <QPushButton>
+#include <QString>
 
+#include <KConfigDialog>
+#include <KConfigDialogManager>
+#include <KCoreConfigSkeleton>
 #include <KLocalizedString>
 #include <KMessageBox>
 
@@ -34,6 +39,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ui_accountssettingspage.h"
 
 #include "accountassistantdialog.h"
+#include "ringaccountgeneralsettingspage.h"
+#include "ringaccountsettings.h"
 
 Q_DECLARE_LOGGING_CATEGORY(KRING)
 
@@ -86,6 +93,118 @@ void AccountsSettingsPage::on_addPushButton_clicked()
   return;
 }
 
+void AccountsSettingsPage::on_modifyPushButton_clicked()
+{
+  auto account
+      = AccountModel::instance().getAccountByModelIndex(ui->accountListView
+                                                        ->currentIndex());
+
+  if (!account) {
+    qCCritical(KRING, "Failed to get account.");
+    return;
+  }
+
+  auto accountSettingsDialog = new KPageDialog(this);
+  accountSettingsDialog->setModal(true);
+  accountSettingsDialog->setFaceType(KPageDialog::Tabbed);
+  accountSettingsDialog->setStandardButtons(QDialogButtonBox::Ok
+                                            | QDialogButtonBox::Apply
+                                            | QDialogButtonBox::Cancel
+                                            | QDialogButtonBox::Reset);
+
+  AbstractSettingsPage * accountGeneralSettingsPage = nullptr;
+
+  switch (account->protocol()) {
+    case Account::Protocol::RING:
+    {
+      accountSettingsDialog->setWindowTitle(i18n("Ring account settings"));
+
+      accountGeneralSettingsPage
+          = new RingAccountGeneralSettingsPage(*account,
+                                               accountSettingsDialog);
+
+      break;
+    }
+    default:
+    {
+      break;
+    }
+  }
+
+  if (!accountGeneralSettingsPage) {
+    delete accountSettingsDialog;
+    qCCritical(KRING,
+               "Failed to create a settings page for account \"%s\".",
+               qUtf8Printable(account->alias()));
+    return;
+  }
+
+  accountSettingsDialog->addPage(accountGeneralSettingsPage, i18n("General"));
+
+  auto accountModifyingDialogManager
+      = new KConfigDialogManager(accountSettingsDialog,
+                                 new RingAccountSettings(*account));
+  accountModifyingDialogManager->addWidget(accountGeneralSettingsPage);
+
+  connect(accountSettingsDialog->button(QDialogButtonBox::Ok),
+          &QAbstractButton::clicked,
+          accountModifyingDialogManager,
+          &KConfigDialogManager::updateSettings);
+  connect(accountSettingsDialog->button(QDialogButtonBox::Apply),
+          &QAbstractButton::clicked,
+          accountModifyingDialogManager,
+          &KConfigDialogManager::updateSettings);
+  connect(accountSettingsDialog->button(QDialogButtonBox::Cancel),
+          &QAbstractButton::clicked,
+          accountModifyingDialogManager,
+          &KConfigDialogManager::updateWidgets);
+  connect(accountSettingsDialog->button(QDialogButtonBox::Reset),
+          &QAbstractButton::clicked,
+          accountModifyingDialogManager,
+          &KConfigDialogManager::updateWidgets);
+
+  auto updateButtonsHandler
+      = [accountSettingsDialog,
+      accountModifyingDialogManager,
+      accountGeneralSettingsPage]()
+  {
+    if (accountModifyingDialogManager->hasChanged()) {
+      if (accountGeneralSettingsPage->isValid()) {
+        accountSettingsDialog->button(QDialogButtonBox::Apply)
+            ->setEnabled(true);
+      } else {
+        accountSettingsDialog->button(QDialogButtonBox::Apply)
+            ->setEnabled(false);
+      }
+      accountSettingsDialog->button(QDialogButtonBox::Reset)
+          ->setEnabled(true);
+    } else {
+      accountGeneralSettingsPage->validate();
+
+      accountSettingsDialog->button(QDialogButtonBox::Apply)
+          ->setEnabled(false);
+      accountSettingsDialog->button(QDialogButtonBox::Reset)
+          ->setEnabled(false);
+    }
+
+    return;
+  };
+
+  connect(accountModifyingDialogManager,
+          static_cast<void (KConfigDialogManager::*)()>(&KConfigDialogManager
+                                                        ::settingsChanged),
+          updateButtonsHandler);
+  connect(accountModifyingDialogManager,
+          &KConfigDialogManager::widgetModified,
+          updateButtonsHandler);
+  updateButtonsHandler();
+
+  accountSettingsDialog->setAttribute(Qt::WA_DeleteOnClose);
+  accountSettingsDialog->show();
+
+  return;
+}
+
 void AccountsSettingsPage::on_deletePushButton_clicked()
 {
   auto account = AccountModel::instance()
@@ -128,16 +247,19 @@ void AccountsSettingsPage::handleCurrentAccountIndexChange
       case Account::RegistrationState::INITIALIZING:
       case Account::RegistrationState::COUNT__:
       {
+        ui->modifyPushButton->setEnabled(false);
         ui->deletePushButton->setEnabled(false);
         break;
       }
       default:
       {
+        ui->modifyPushButton->setEnabled(true);
         ui->deletePushButton->setEnabled(true);
         break;
       }
     }
   } else {
+    ui->modifyPushButton->setEnabled(false);
     ui->deletePushButton->setEnabled(false);
   }
 

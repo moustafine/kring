@@ -27,6 +27,16 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="modifyPushButton">
+       <property name="text">
+        <string>Modify...</string>
+       </property>
+       <property name="icon">
+        <iconset theme="entry-edit"/>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="deletePushButton">
        <property name="text">
         <string>Delete</string>

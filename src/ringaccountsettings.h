@@ -18,33 +18,26 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ACCOUNTSSETTINGSPAGE_H
-#define ACCOUNTSSETTINGSPAGE_H
+#ifndef RINGACCOUNTSETTINGS_H
+#define RINGACCOUNTSETTINGS_H
 
-#include <QWidget>
+#include <QString>
 
-namespace Ui {
-class AccountsSettingsPage;
-}
+#include "accountsettings.h"
 
-class AccountsSettingsPage : public QWidget
+class RingAccountSettings : public AccountSettings
 {
   Q_OBJECT
 
 public:
-  explicit AccountsSettingsPage(QWidget * parent = nullptr);
-  ~AccountsSettingsPage();
-
-private slots:
-  void on_addPushButton_clicked();
-  void on_modifyPushButton_clicked();
-  void on_deletePushButton_clicked();
-
-  void handleCurrentAccountIndexChange(const QModelIndex & currentIndex,
-                                       const QModelIndex & previousIndex);
+  explicit RingAccountSettings(Account & account, QObject * parent = nullptr);
+  ~RingAccountSettings();
 
 private:
-  Ui::AccountsSettingsPage * ui = nullptr;
+  bool accountEnabled;
+
+  QString userName;
+  QString fullName;
 };
 
-#endif // ACCOUNTSSETTINGSPAGE_H
+#endif // RINGACCOUNTSETTINGS_H

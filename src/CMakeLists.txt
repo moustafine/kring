@@ -1,6 +1,7 @@
 set(kring_SRCS
   abstractsettingspage.cpp
   accountassistantdialog.cpp
+  accountsettings.cpp
   accountssettingspage.cpp
   finishpage.cpp
   generalsettingspage.cpp
@@ -10,6 +11,8 @@ set(kring_SRCS
   main.cpp
   progresspage.cpp
   ringaccountcredentialspage.cpp
+  ringaccountgeneralsettingspage.cpp
+  ringaccountsettings.cpp
 )
 
 kconfig_add_kcfg_files(kring_SRCS kringsettings.kcfgc)
@@ -20,6 +23,7 @@ ki18n_wrap_ui(kring_SRCS
   kringwidget.ui
   progresspage.ui
   ringaccountcredentialspage.ui
+  ringaccountgeneralsettingspage.ui
 )
 
 include_directories(${LIB_RING_CLIENT_INCLUDE_DIR})
