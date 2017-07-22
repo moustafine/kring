@@ -200,6 +200,17 @@ void AccountsSettingsPage::on_modifyPushButton_clicked()
           updateButtonsHandler);
   updateButtonsHandler();
 
+  connect(&AccountModel::instance(),
+          &AccountModel::accountRemoved,
+          accountSettingsDialog,
+          [account, accountSettingsDialog](Account * removedAccount)
+  {
+    if (account == removedAccount) {
+      accountSettingsDialog->close();
+    }
+    return;
+  });
+
   accountSettingsDialog->setAttribute(Qt::WA_DeleteOnClose);
   accountSettingsDialog->show();
 
