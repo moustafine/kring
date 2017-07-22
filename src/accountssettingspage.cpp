@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "accountssettingspage.h"
 
+#include <QByteArray>
 #include <QItemSelectionModel>
 #include <QListView>
 #include <QLoggingCategory>
@@ -215,6 +216,8 @@ void AccountsSettingsPage::on_deletePushButton_clicked()
     return;
   }
 
+  auto accountId = account->id();
+
   auto buttonCode
       = KMessageBox::warningContinueCancel(this,
                                            i18n("Do you want to delete"
@@ -224,7 +227,9 @@ void AccountsSettingsPage::on_deletePushButton_clicked()
                                            KStandardGuiItem::del(),
                                            KStandardGuiItem::cancel());
 
-  if (buttonCode == KMessageBox::Continue) {
+  account = AccountModel::instance().getById(accountId);
+
+  if ((buttonCode == KMessageBox::Continue) && account) {
     AccountModel::instance().remove(account);
     AccountModel::instance().save();
 
