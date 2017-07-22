@@ -34,7 +34,7 @@ public:
   ~RingAccountSettings();
 
 private:
-  bool accountEnabled;
+  bool accountEnabled = false;
 
   QString userName;
   QString fullName;

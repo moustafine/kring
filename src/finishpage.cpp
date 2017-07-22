@@ -65,3 +65,8 @@ void FinishPage::insertItem(int index, QLayoutItem * layoutItem)
   ui->vboxLayout->insertItem(index, layoutItem);
   return;
 }
+
+int FinishPage::getItemCount() const
+{
+  return ui->vboxLayout->count();
+}

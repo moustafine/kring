@@ -65,7 +65,7 @@ RingAccountGeneralSettingsPage::~RingAccountGeneralSettingsPage()
 
 bool RingAccountGeneralSettingsPage::isValid() const
 {
-  return validUserName;
+  return userNameValid;
 }
 
 void RingAccountGeneralSettingsPage::validate()
@@ -83,7 +83,7 @@ void RingAccountGeneralSettingsPage::updateUi()
       .color()
       .name(QColor::HexRgb);
 
-  if (validUserName) {
+  if (userNameValid) {
     setStyleSheet(QStringLiteral());
   } else {
     setStyleSheet(QStringLiteral("QLineEdit#kcfg_userName {"
@@ -97,10 +97,10 @@ void RingAccountGeneralSettingsPage::updateUi()
 
 void RingAccountGeneralSettingsPage::validateUserName()
 {
-  validUserName = true;
+  userNameValid = true;
 
   if (ui->kcfg_userName->text().isEmpty()) {
-    validUserName = false;
+    userNameValid = false;
   }
 
   updateUi();

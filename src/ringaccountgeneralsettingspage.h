@@ -51,7 +51,7 @@ private slots:
 private:
   Ui::RingAccountGeneralSettingsPage * ui = nullptr;
 
-  bool validUserName = false;
+  bool userNameValid = false;
 };
 
 #endif // RINGACCOUNTGENERALSETTINGSPAGE_H

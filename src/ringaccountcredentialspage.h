@@ -21,9 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef RINGACCOUNTCREDENTIALSPAGE_H
 #define RINGACCOUNTCREDENTIALSPAGE_H
 
-#include "abstractsettingspage.h"
-
 #include <namedirectory.h>
+
+#include "abstractsettingspage.h"
 
 class KPageWidgetItem;
 
@@ -69,9 +69,9 @@ private slots:
 private:
   Ui::RingAccountCredentialsPage * ui = nullptr;
 
-  bool validUserName = false;
-  bool validPassword = false;
-  bool validConfirmPassword = false;
+  bool userNameValid = false;
+  bool passwordValid = false;
+  bool confirmPasswordValid = false;
 };
 
 #endif // RINGACCOUNTCREDENTIALSPAGE_H

@@ -49,6 +49,7 @@ public:
                     Qt::Alignment alignment = Qt::Alignment());
   void insertItem(int index, QLayoutItem * layoutItem);
 
+  int getItemCount() const;
 private:
   Ui::FinishPage * ui = nullptr;
 };

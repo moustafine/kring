@@ -82,7 +82,7 @@ RingAccountCredentialsPage::~RingAccountCredentialsPage()
 
 bool RingAccountCredentialsPage::isValid() const
 {
-    return validUserName && validPassword && validConfirmPassword;
+    return userNameValid && passwordValid && confirmPasswordValid;
 }
 
 void RingAccountCredentialsPage::validate()
@@ -121,7 +121,7 @@ void RingAccountCredentialsPage::updateUi()
       .color()
       .name(QColor::HexRgb);
 
-  if (validUserName) {
+  if (userNameValid) {
     setStyleSheet(QStringLiteral());
   } else {
     setStyleSheet(QStringLiteral("QLineEdit#userNameLineEdit {"
@@ -130,7 +130,7 @@ void RingAccountCredentialsPage::updateUi()
                   + QStringLiteral("}"));
   }
 
-  if (!validPassword) {
+  if (!passwordValid) {
     setStyleSheet(styleSheet()
                   + QStringLiteral("QLineEdit#passwordLineEdit {"
                                    "background:")
@@ -138,7 +138,7 @@ void RingAccountCredentialsPage::updateUi()
                   + QStringLiteral("}"));
   }
 
-  if (!validPassword || !validConfirmPassword) {
+  if (!passwordValid || !confirmPasswordValid) {
     setStyleSheet(styleSheet()
                   + QStringLiteral("QLineEdit#confirmPasswordLineEdit {"
                                    "background:")
@@ -146,7 +146,7 @@ void RingAccountCredentialsPage::updateUi()
                   + QStringLiteral("}"));
   }
 
-  if (validUserName && validPassword && validConfirmPassword) {
+  if (userNameValid && passwordValid && confirmPasswordValid) {
     emit valid(this, true);
   } else {
     emit valid(this, false);
@@ -157,14 +157,14 @@ void RingAccountCredentialsPage::updateUi()
 
 void RingAccountCredentialsPage::validateUserName()
 {
-  validUserName = true;
+  userNameValid = true;
 
   if (ui->userNameLineEdit->text().isEmpty()) {
-     validUserName = false;
+     userNameValid = false;
   }
 
   if (ui->registerPublicUserNameCheckBox->isChecked()) {
-     validUserName = false;
+     userNameValid = false;
 
      ui->searchingStateLabel->setText(i18n("Searching..."));
 
@@ -182,14 +182,14 @@ void RingAccountCredentialsPage::validateUserName()
 
 void RingAccountCredentialsPage::validatePassword()
 {
-  validPassword = true;
+  passwordValid = true;
   if (ui->passwordLineEdit->text().isEmpty()) {
-     validPassword = false;
+     passwordValid = false;
   }
 
-  validConfirmPassword = true;
+  confirmPasswordValid = true;
   if (ui->passwordLineEdit->text() != ui->confirmPasswordLineEdit->text()) {
-     validConfirmPassword = false;
+     confirmPasswordValid = false;
   }
 
   updateUi();
@@ -241,27 +241,22 @@ void RingAccountCredentialsPage::validatePublicUserName
   Q_UNUSED(account)
   Q_UNUSED(address)
 
-  if (!isActiveWindow()) {
-    return;
-  }
-
-  validUserName = false;
-
   if (ui->userNameLineEdit->text() != name) {
-    validateUserName();
     return;
   }
+
+  userNameValid = false;
 
   switch (status) {
     case NameDirectory::LookupStatus::NOT_FOUND:
     {
-      validUserName = true;
+      userNameValid = true;
       ui->searchingStateLabel->setText(i18n("Name is available"));
       break;
     }
     case NameDirectory::LookupStatus::SUCCESS:
     {
-      ui->searchingStateLabel->setText(i18n("Name not available"));
+      ui->searchingStateLabel->setText(i18n("Name is not available"));
       break;
     }
     case NameDirectory::LookupStatus::INVALID_NAME:

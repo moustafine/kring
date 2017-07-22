@@ -148,24 +148,22 @@ void AccountAssistantDialog::handleAccountStateChange
 
       account->performAction(Account::EditAction::RELOAD);
 
-      auto summaryLabel = new QLabel(finishPage);
-      summaryLabel->setText(i18n("The Ring account was created."));
+      auto summaryLabel = new QLabel(i18n("The Ring account was created."));
 
-      finishPage->addWidget(summaryLabel);
+      finishPage->insertWidget(0, summaryLabel);
 
-      auto idGroupBox = new QGroupBox(finishPage);
-      idGroupBox->setTitle(i18n("ID"));
+      auto idGroupBox = new QGroupBox(i18n("ID"));
 
-      auto idLabel = new QLabel(idGroupBox);
+      auto idLayout = new QVBoxLayout(idGroupBox);
+
+      auto idLabel = new QLabel(account->username());
       idLabel->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
       idLabel->setAlignment(Qt::AlignCenter);
       idLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
-      idLabel->setText(account->username());
 
-      auto idLayout = new QVBoxLayout(idGroupBox);
       idLayout->addWidget(idLabel);
 
-      finishPage->addWidget(idGroupBox);
+      finishPage->insertWidget(finishPage->getItemCount() - 1, idGroupBox);
 
       if (ringAccountCredentialsPage
           ->isPublicUserNameRegistrationRequested()) {
@@ -180,20 +178,16 @@ void AccountAssistantDialog::handleAccountStateChange
                   ::handlePublicUserNameRegistrationEnd);
           return;
         } else {
-          auto messageWidget = new KMessageWidget(finishPage);
-          messageWidget->setText(i18n("Could not start"
-                                      " public user name"
-                                      " registration process."));
+          auto messageWidget
+              = new KMessageWidget(i18n("Could not start"
+                                        " public user name"
+                                        " registration process."));
           messageWidget->setWordWrap(true);
           messageWidget->setMessageType(KMessageWidget::Error);
+
           finishPage->insertWidget(0, messageWidget);
         }
       }
-
-      finishPage->addItem(new QSpacerItem(20,
-                                          40,
-                                          QSizePolicy::Minimum,
-                                          QSizePolicy::Expanding));
 
       next();
 
@@ -206,14 +200,9 @@ void AccountAssistantDialog::handleAccountStateChange
                  this,
                  &AccountAssistantDialog::handleAccountStateChange);
 
-      auto summaryLabel = new QLabel(finishPage);
-      summaryLabel->setText(i18n("Ring account creation failed."));
-      finishPage->addWidget(summaryLabel);
+      auto summaryLabel = new QLabel(i18n("Ring account creation failed."));
 
-      finishPage->addItem(new QSpacerItem(20,
-                                          40,
-                                          QSizePolicy::Minimum,
-                                          QSizePolicy::Expanding));
+      finishPage->insertWidget(0, summaryLabel);
 
       next();
 
@@ -241,26 +230,25 @@ void AccountAssistantDialog::handlePublicUserNameRegistrationEnd
              &AccountAssistantDialog::handlePublicUserNameRegistrationEnd);
 
   if (status == NameDirectory::RegisterNameStatus::SUCCESS) {
-    auto publicUserNameGroupBox = new QGroupBox(finishPage);
-    publicUserNameGroupBox->setTitle(i18n("Public user name"));
+    auto publicUserNameGroupBox = new QGroupBox(i18n("Public user name"));
 
-    auto publicUserNameLabel = new QLabel(publicUserNameGroupBox);
+    auto publicUserNameLayout = new QVBoxLayout(publicUserNameGroupBox);
+
+    auto publicUserNameLabel = new QLabel(QStringLiteral("ring:")
+                                          + account->registeredName());
     publicUserNameLabel
         ->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
     publicUserNameLabel->setAlignment(Qt::AlignCenter);
     publicUserNameLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    publicUserNameLabel->setText(QStringLiteral("ring:")
-                                 + account->registeredName());
 
-    auto publicUserNameLayout = new QVBoxLayout(publicUserNameGroupBox);
     publicUserNameLayout->addWidget(publicUserNameLabel);
 
-    finishPage->addWidget(publicUserNameGroupBox);
+    finishPage->insertWidget(finishPage->getItemCount() - 1,
+                             publicUserNameGroupBox);
   } else {
-    auto messageWidget = new KMessageWidget(finishPage);
+    auto messageWidget = new KMessageWidget();
     messageWidget->setWordWrap(true);
     messageWidget->setMessageType(KMessageWidget::Warning);
-    finishPage->insertWidget(0, messageWidget);
 
     const auto messagePart = i18n("Could not register public user name.");
     const auto space = QStringLiteral(" ");
@@ -302,12 +290,9 @@ void AccountAssistantDialog::handlePublicUserNameRegistrationEnd
         break;
       }
     }
-  }
 
-  finishPage->addItem(new QSpacerItem(20,
-                                      40,
-                                      QSizePolicy::Minimum,
-                                      QSizePolicy::Expanding));
+    finishPage->insertWidget(0, messageWidget);
+  }
 
   next();
 
