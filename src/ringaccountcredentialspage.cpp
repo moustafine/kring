@@ -82,7 +82,7 @@ RingAccountCredentialsPage::~RingAccountCredentialsPage()
 
 bool RingAccountCredentialsPage::isValid() const
 {
-    return userNameValid && passwordValid && confirmPasswordValid;
+  return userNameValid && passwordValid && confirmPasswordValid;
 }
 
 void RingAccountCredentialsPage::validate()
@@ -160,19 +160,19 @@ void RingAccountCredentialsPage::validateUserName()
   userNameValid = true;
 
   if (ui->userNameLineEdit->text().isEmpty()) {
-     userNameValid = false;
+    userNameValid = false;
   }
 
   if (ui->registerPublicUserNameCheckBox->isChecked()) {
-     userNameValid = false;
+    userNameValid = false;
 
-     ui->searchingStateLabel->setText(i18n("Searching..."));
+    ui->searchingStateLabel->setText(i18n("Searching..."));
 
-     NameDirectory::instance().lookupName(nullptr,
-                                          QStringLiteral(),
-                                          ui->userNameLineEdit->text());
+    NameDirectory::instance().lookupName(nullptr,
+                                         QStringLiteral(),
+                                         ui->userNameLineEdit->text());
   } else {
-     ui->searchingStateLabel->clear();
+    ui->searchingStateLabel->clear();
   }
 
   updateUi();
@@ -184,12 +184,12 @@ void RingAccountCredentialsPage::validatePassword()
 {
   passwordValid = true;
   if (ui->passwordLineEdit->text().isEmpty()) {
-     passwordValid = false;
+    passwordValid = false;
   }
 
   confirmPasswordValid = true;
   if (ui->passwordLineEdit->text() != ui->confirmPasswordLineEdit->text()) {
-     confirmPasswordValid = false;
+    confirmPasswordValid = false;
   }
 
   updateUi();

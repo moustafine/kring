@@ -118,7 +118,7 @@ void AccountAssistantDialog::createRingAccount()
       = AccountModel::instance().add(ringAccountCredentialsPage->getUserName(),
                                      Account::Protocol::RING);
   if (!ringAccountCredentialsPage->getFullName().isEmpty()) {
-     account->setDisplayName(ringAccountCredentialsPage->getFullName());
+    account->setDisplayName(ringAccountCredentialsPage->getFullName());
   }
   account->setArchivePassword(ringAccountCredentialsPage->getPassword());
   account->setUpnpEnabled(true);
