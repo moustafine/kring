@@ -164,11 +164,13 @@ void AccountsSettingsPage::on_modifyPushButton_clicked()
           accountModifyingDialogManager,
           &KConfigDialogManager::updateWidgets);
 
-  auto updateButtonsHandler
+  auto validateAccountSettingsDialogHandler
       = [accountSettingsDialog,
       accountModifyingDialogManager,
       accountGeneralSettingsPage]()
   {
+    accountGeneralSettingsPage->validate();
+
     if (accountModifyingDialogManager->hasChanged()) {
       if (accountGeneralSettingsPage->isValid()) {
         accountSettingsDialog->button(QDialogButtonBox::Apply)
@@ -180,8 +182,6 @@ void AccountsSettingsPage::on_modifyPushButton_clicked()
       accountSettingsDialog->button(QDialogButtonBox::Reset)
           ->setEnabled(true);
     } else {
-      accountGeneralSettingsPage->validate();
-
       accountSettingsDialog->button(QDialogButtonBox::Apply)
           ->setEnabled(false);
       accountSettingsDialog->button(QDialogButtonBox::Reset)
@@ -194,11 +194,11 @@ void AccountsSettingsPage::on_modifyPushButton_clicked()
   connect(accountModifyingDialogManager,
           static_cast<void (KConfigDialogManager::*)()>(&KConfigDialogManager
                                                         ::settingsChanged),
-          updateButtonsHandler);
+          validateAccountSettingsDialogHandler);
   connect(accountModifyingDialogManager,
           &KConfigDialogManager::widgetModified,
-          updateButtonsHandler);
-  updateButtonsHandler();
+          validateAccountSettingsDialogHandler);
+  validateAccountSettingsDialogHandler();
 
   connect(&AccountModel::instance(),
           &AccountModel::accountRemoved,

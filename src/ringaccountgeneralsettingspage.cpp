@@ -50,12 +50,6 @@ RingAccountGeneralSettingsPage::RingAccountGeneralSettingsPage
   QValidator * userNameValidator
       = new QRegularExpressionValidator(userNameRegularExpression, this);
   ui->kcfg_userName->setValidator(userNameValidator);
-
-  connect(ui->kcfg_userName,
-          &QLineEdit::textEdited,
-          this,
-          &RingAccountGeneralSettingsPage::validateUserName);
-  validateUserName();
 }
 
 RingAccountGeneralSettingsPage::~RingAccountGeneralSettingsPage()
