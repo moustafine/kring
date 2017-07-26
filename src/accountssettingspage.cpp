@@ -173,15 +173,21 @@ void AccountsSettingsPage::on_modifyPushButton_clicked()
 
     if (accountModifyingDialogManager->hasChanged()) {
       if (accountGeneralSettingsPage->isValid()) {
+        accountSettingsDialog->button(QDialogButtonBox::Ok)
+            ->setEnabled(true);
         accountSettingsDialog->button(QDialogButtonBox::Apply)
             ->setEnabled(true);
       } else {
+        accountSettingsDialog->button(QDialogButtonBox::Ok)
+            ->setEnabled(false);
         accountSettingsDialog->button(QDialogButtonBox::Apply)
             ->setEnabled(false);
       }
       accountSettingsDialog->button(QDialogButtonBox::Reset)
           ->setEnabled(true);
     } else {
+      accountSettingsDialog->button(QDialogButtonBox::Ok)
+          ->setEnabled(true);
       accountSettingsDialog->button(QDialogButtonBox::Apply)
           ->setEnabled(false);
       accountSettingsDialog->button(QDialogButtonBox::Reset)

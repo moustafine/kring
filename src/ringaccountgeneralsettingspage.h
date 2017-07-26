@@ -45,7 +45,6 @@ public:
 private:
   void updateUi();
 
-private slots:
   void validateUserName();
 
 private:
