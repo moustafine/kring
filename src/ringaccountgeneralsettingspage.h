@@ -21,7 +21,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef RINGACCOUNTGENERALSETTINGSPAGE_H
 #define RINGACCOUNTGENERALSETTINGSPAGE_H
 
+#include <namedirectory.h>
+
 #include "abstractsettingspage.h"
+
+class QLabel;
+class QLineEdit;
+class QProgressBar;
+class QPushButton;
+class QVBoxLayout;
+
+class KMessageWidget;
 
 class Account;
 
@@ -47,10 +57,33 @@ private:
 
   void validateUserName();
 
+  void setRegisteredPublicUserNameLabel(const QString & name);
+  void setWarningMessage(const NameDirectory::RegisterNameStatus status);
+
+private slots:
+  void findPublicUserName(const QString & name);
+  void validatePublicUserName(const Account * account,
+                              NameDirectory::LookupStatus status,
+                              const QString & address,
+                              const QString & name);
+  void handlePublicUserNameRegistrationEnd
+  (NameDirectory::RegisterNameStatus status, const QString & name);
+
 private:
   Ui::RingAccountGeneralSettingsPage * ui = nullptr;
 
+  QVBoxLayout * publicUserNameLayout = nullptr;
+
+  QLineEdit * publicUserNameLineEdit = nullptr;
+  QPushButton * registerPublicUserNamePushButton = nullptr;
+  QProgressBar * registeringPublicUserNameProgressBar = nullptr;
+  QLabel * publicUserNameStateLabel = nullptr;
+
+  KMessageWidget * warningMessageWidget = nullptr;
+  KMessageWidget * errorMessageWidget = nullptr;
+
   bool userNameValid = false;
+  bool publicUserNameValid = false;
 };
 
 #endif // RINGACCOUNTGENERALSETTINGSPAGE_H
