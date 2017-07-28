@@ -40,6 +40,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ui_accountssettingspage.h"
 
 #include "accountassistantdialog.h"
+#include "accountdelegate.h"
 #include "ringaccountgeneralsettingspage.h"
 #include "ringaccountsettings.h"
 
@@ -51,6 +52,9 @@ AccountsSettingsPage::AccountsSettingsPage(QWidget * parent)
   ui = new Ui::AccountsSettingsPage();
   ui->setupUi(this);
 
+  delete ui->accountListView->itemDelegate();
+  ui->accountListView
+      ->setItemDelegate(new AccountDelegate(ui->accountListView));
   ui->accountListView->setEditTriggers(QAbstractItemView::NoEditTriggers);
   ui->accountListView->setModel(&AccountModel::instance());
 
