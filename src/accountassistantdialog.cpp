@@ -103,7 +103,8 @@ void AccountAssistantDialog::setValidPage(QWidget * page, bool valid)
 
 void AccountAssistantDialog::closeEvent(QCloseEvent * event)
 {
-  if (currentPage() == progressPageItem) {
+  if ((currentPage() == progressPageItem)
+      && (account->editState() != Account::EditState::REMOVED)) {
     event->ignore();
   } else {
     event->accept();
@@ -127,6 +128,18 @@ void AccountAssistantDialog::createRingAccount()
           &Account::stateChanged,
           this,
           &AccountAssistantDialog::handleAccountStateChange);
+
+  connect(&AccountModel::instance(),
+          &AccountModel::accountRemoved,
+          this,
+          [this](Account * removedAccount)
+  {
+    if (account == removedAccount) {
+      account->performAction(Account::EditAction::REMOVE);
+      close();
+    }
+    return;
+  });
 
   account->performAction(Account::EditAction::SAVE);
 
