@@ -18,37 +18,23 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ACCOUNTSSETTINGSPAGE_H
-#define ACCOUNTSSETTINGSPAGE_H
+#ifndef ACCOUNTPROXYMODEL_H
+#define ACCOUNTPROXYMODEL_H
 
-#include <QWidget>
+#include <QSortFilterProxyModel>
 
-namespace Ui {
-class AccountsSettingsPage;
-}
-
-class AccountProxyModel;
-
-class AccountsSettingsPage : public QWidget
+class AccountProxyModel : public QSortFilterProxyModel
 {
   Q_OBJECT
 
 public:
-  explicit AccountsSettingsPage(QWidget * parent = nullptr);
-  ~AccountsSettingsPage();
+  explicit AccountProxyModel(QObject * parent = nullptr);
+  ~AccountProxyModel();
 
-private slots:
-  void on_addPushButton_clicked();
-  void on_modifyPushButton_clicked();
-  void on_deletePushButton_clicked();
-
-  void handleCurrentAccountIndexChange(const QModelIndex & currentProxyIndex,
-                                       const QModelIndex & previousProxyIndex);
-
-private:
-  Ui::AccountsSettingsPage * ui = nullptr;
-
-  AccountProxyModel * accountProxyModel = nullptr;
+public:
+  QVariant headerData(int section,
+                      Qt::Orientation orientation,
+                      int role = Qt::DisplayRole) const override;
 };
 
-#endif // ACCOUNTSSETTINGSPAGE_H
+#endif // ACCOUNTPROXYMODEL_H

@@ -22,11 +22,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QByteArray>
 #include <QItemSelectionModel>
-#include <QListView>
 #include <QLoggingCategory>
 #include <QModelIndex>
 #include <QPushButton>
 #include <QString>
+#include <QTreeView>
 
 #include <KConfigDialog>
 #include <KConfigDialogManager>
@@ -41,6 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "accountassistantdialog.h"
 #include "accountdelegate.h"
+#include "accountproxymodel.h"
 #include "ringaccountgeneralsettingspage.h"
 #include "ringaccountsettings.h"
 
@@ -52,19 +53,26 @@ AccountsSettingsPage::AccountsSettingsPage(QWidget * parent)
   ui = new Ui::AccountsSettingsPage();
   ui->setupUi(this);
 
-  delete ui->accountListView->itemDelegate();
-  ui->accountListView
-      ->setItemDelegate(new AccountDelegate(ui->accountListView));
-  ui->accountListView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-  ui->accountListView->setModel(&AccountModel::instance());
+  accountProxyModel = new AccountProxyModel(this);
+  accountProxyModel->setSourceModel(&AccountModel::instance());
 
-  connect(ui->accountListView->selectionModel(),
+  delete ui->accountTreeView->itemDelegate();
+  ui->accountTreeView
+      ->setItemDelegate(new AccountDelegate(ui->accountTreeView));
+  ui->accountTreeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+  ui->accountTreeView->setAlternatingRowColors(true);
+  ui->accountTreeView->setRootIsDecorated(false);
+  ui->accountTreeView->setModel(accountProxyModel);
+  ui->accountTreeView->setSortingEnabled(true);
+  ui->accountTreeView->sortByColumn(0, Qt::AscendingOrder);
+
+  connect(ui->accountTreeView->selectionModel(),
           &QItemSelectionModel::currentChanged,
           this,
           &AccountsSettingsPage::handleCurrentAccountIndexChange);
 
-  auto currentIndex = ui->accountListView->currentIndex();
-  handleCurrentAccountIndexChange(currentIndex, currentIndex);
+  auto currentProxyIndex = ui->accountTreeView->currentIndex();
+  handleCurrentAccountIndexChange(currentProxyIndex, currentProxyIndex);
 
   connect(&AccountModel::instance(),
           &AccountModel::accountStateChanged,
@@ -73,11 +81,14 @@ AccountsSettingsPage::AccountsSettingsPage(QWidget * parent)
   {
     Q_UNUSED(state);
 
-    auto currentIndex = ui->accountListView->currentIndex();
+    auto currentProxyIndex = ui->accountTreeView->currentIndex();
+    auto currentSourceIndex
+        = accountProxyModel->mapToSource(currentProxyIndex);
 
     if (account
-        == AccountModel::instance().getAccountByModelIndex(currentIndex)) {
-      handleCurrentAccountIndexChange(currentIndex, currentIndex);
+        == AccountModel::instance()
+        .getAccountByModelIndex(currentSourceIndex)) {
+      handleCurrentAccountIndexChange(currentProxyIndex, currentProxyIndex);
     }
 
     return;
@@ -100,9 +111,11 @@ void AccountsSettingsPage::on_addPushButton_clicked()
 
 void AccountsSettingsPage::on_modifyPushButton_clicked()
 {
+  auto currentSourceIndex
+      = accountProxyModel->mapToSource(ui->accountTreeView->currentIndex());
+
   auto account
-      = AccountModel::instance().getAccountByModelIndex(ui->accountListView
-                                                        ->currentIndex());
+      = AccountModel::instance().getAccountByModelIndex(currentSourceIndex);
 
   if (!account) {
     qCCritical(KRING, "Failed to get account.");
@@ -229,8 +242,11 @@ void AccountsSettingsPage::on_modifyPushButton_clicked()
 
 void AccountsSettingsPage::on_deletePushButton_clicked()
 {
-  auto account = AccountModel::instance()
-      .getAccountByModelIndex(ui->accountListView->currentIndex());
+  auto currentSourceIndex
+      = accountProxyModel->mapToSource(ui->accountTreeView->currentIndex());
+
+  auto account
+      = AccountModel::instance().getAccountByModelIndex(currentSourceIndex);
 
   if (!account) {
     qCCritical(KRING, "Failed to get account.");
@@ -254,22 +270,24 @@ void AccountsSettingsPage::on_deletePushButton_clicked()
     AccountModel::instance().remove(account);
     AccountModel::instance().save();
 
-    ui->accountListView->setCurrentIndex(AccountModel::instance().index(0, 0));
+    ui->accountTreeView->setCurrentIndex(accountProxyModel->index(0, 0));
   }
 
   return;
 }
 
 void AccountsSettingsPage::handleCurrentAccountIndexChange
-(const QModelIndex & currentIndex, const QModelIndex & previousIndex)
+(const QModelIndex & currentProxyIndex, const QModelIndex & previousProxyIndex)
 {
-  Q_UNUSED(previousIndex);
+  Q_UNUSED(previousProxyIndex);
 
-  if (currentIndex.isValid()) {
-    auto registrationState = AccountModel::instance()
-        .getAccountByModelIndex(currentIndex)->registrationState();
+  auto currentSourceIndex = accountProxyModel->mapToSource(currentProxyIndex);
 
-    switch (registrationState) {
+  auto account
+      = AccountModel::instance().getAccountByModelIndex(currentSourceIndex);
+
+  if (account) {
+    switch (account->registrationState()) {
       case Account::RegistrationState::INITIALIZING:
       case Account::RegistrationState::COUNT__:
       {

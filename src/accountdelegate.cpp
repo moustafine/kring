@@ -20,6 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "accountdelegate.h"
 
+#include <QAbstractProxyModel>
+
 #include <account.h>
 #include <accountmodel.h>
 
@@ -43,10 +45,24 @@ bool AccountDelegate::editorEvent(QEvent * event,
                                                        model,
                                                        option,
                                                        index);
+
   if (eventHandled) {
-    auto accountModel = qobject_cast<AccountModel *>(model);
+    AccountModel * accountModel = nullptr;
+    QModelIndex sourceIndex(index);
+
+    while (!accountModel || model) {
+      auto proxyModel = qobject_cast<QAbstractProxyModel *>(model);
+      if (proxyModel) {
+        model = proxyModel->sourceModel();
+        sourceIndex = proxyModel->mapToSource(sourceIndex);
+      } else {
+        accountModel = qobject_cast<AccountModel *>(model);
+        model = nullptr;
+      }
+    }
+
     if (accountModel) {
-      auto account = accountModel->getAccountByModelIndex(index);
+      auto account = accountModel->getAccountByModelIndex(sourceIndex);
       if (account) {
         if (!((account->editState() == Account::EditState::MODIFIED_COMPLETE)
               && account->performAction(Account::EditAction::SAVE))) {

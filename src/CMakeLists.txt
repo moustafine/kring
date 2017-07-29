@@ -2,6 +2,7 @@ set(kring_SRCS
   abstractsettingspage.cpp
   accountassistantdialog.cpp
   accountdelegate.cpp
+  accountproxymodel.cpp
   accountsettings.cpp
   accountssettingspage.cpp
   authenticationdialog.cpp

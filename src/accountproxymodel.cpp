@@ -18,37 +18,45 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ACCOUNTSSETTINGSPAGE_H
-#define ACCOUNTSSETTINGSPAGE_H
+#include "accountproxymodel.h"
 
-#include <QWidget>
+#include <QString>
+#include <QVariant>
 
-namespace Ui {
-class AccountsSettingsPage;
+#include <KLocalizedString>
+
+#include <accountmodel.h>
+
+AccountProxyModel::AccountProxyModel(QObject * parent)
+  : QSortFilterProxyModel(parent)
+{
+  ;
 }
 
-class AccountProxyModel;
-
-class AccountsSettingsPage : public QWidget
+AccountProxyModel::~AccountProxyModel()
 {
-  Q_OBJECT
+  ;
+}
 
-public:
-  explicit AccountsSettingsPage(QWidget * parent = nullptr);
-  ~AccountsSettingsPage();
-
-private slots:
-  void on_addPushButton_clicked();
-  void on_modifyPushButton_clicked();
-  void on_deletePushButton_clicked();
-
-  void handleCurrentAccountIndexChange(const QModelIndex & currentProxyIndex,
-                                       const QModelIndex & previousProxyIndex);
-
-private:
-  Ui::AccountsSettingsPage * ui = nullptr;
-
-  AccountProxyModel * accountProxyModel = nullptr;
-};
-
-#endif // ACCOUNTSSETTINGSPAGE_H
+QVariant AccountProxyModel::headerData(int section,
+                                       Qt::Orientation orientation,
+                                       int role) const
+{
+  auto accountModel = qobject_cast<AccountModel *>(sourceModel());
+  if (accountModel) {
+    if ((role == Qt::DisplayRole) && (orientation == Qt::Horizontal)) {
+      switch (section) {
+        case 0:
+        {
+          return i18n("User name");
+        }
+        default:
+        {
+          break;
+        }
+      }
+    }
+    return QVariant();
+  }
+  return QSortFilterProxyModel::headerData(section, orientation, role);
+}
