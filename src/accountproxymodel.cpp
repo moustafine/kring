@@ -20,15 +20,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "accountproxymodel.h"
 
+#include <QModelIndex>
 #include <QString>
 #include <QVariant>
 
 #include <KLocalizedString>
 
+#include <account.h>
 #include <accountmodel.h>
 
 AccountProxyModel::AccountProxyModel(QObject * parent)
-  : QSortFilterProxyModel(parent)
+  : QIdentityProxyModel(parent)
 {
   ;
 }
@@ -36,6 +38,86 @@ AccountProxyModel::AccountProxyModel(QObject * parent)
 AccountProxyModel::~AccountProxyModel()
 {
   ;
+}
+
+QModelIndex AccountProxyModel::index(int row,
+                                     int column,
+                                     const QModelIndex & parent) const
+{
+  if (row < 0 || column < 0) {
+    return QModelIndex();
+  }
+
+  auto accountModel = qobject_cast<AccountModel *>(sourceModel());
+  if (accountModel) {
+    switch (column) {
+      case 0:
+      {
+        break;
+      }
+      case 1:
+      {
+        return createIndex(row, column);
+      }
+      default:
+      {
+        return QModelIndex();
+      }
+    }
+  }
+  return QIdentityProxyModel::index(row, column, parent);
+}
+
+int AccountProxyModel::columnCount(const QModelIndex & parent) const
+{
+  auto accountModel = qobject_cast<AccountModel *>(sourceModel());
+  if (accountModel) {
+    return 2;
+  }
+  return QIdentityProxyModel::columnCount(parent);
+}
+
+QVariant AccountProxyModel::data(const QModelIndex & index, int role) const
+{
+  if (!index.isValid()) {
+    return QVariant();
+  }
+
+  auto accountModel = qobject_cast<AccountModel *>(sourceModel());
+  if (accountModel && (index.column() > 0)) {
+    if (role == Qt::DisplayRole) {
+      auto accountIndex = QIdentityProxyModel::index(index.row(), 0);
+      auto account = accountModel->getAccountByModelIndex(accountIndex);
+      if (account) {
+        switch (index.column()) {
+          case 1:
+          {
+            switch (account->protocol()) {
+              case Account::Protocol::SIP:
+              {
+                return QStringLiteral("SIP");
+              }
+              case Account::Protocol::RING:
+              {
+                return QStringLiteral("Ring");
+              }
+              default:
+              {
+                break;
+              }
+            }
+            break;
+          }
+          default:
+          {
+            break;
+          }
+        }
+      }
+    }
+    return QVariant();
+  }
+  return QIdentityProxyModel::data(index, role);
 }
 
 QVariant AccountProxyModel::headerData(int section,
@@ -50,6 +132,10 @@ QVariant AccountProxyModel::headerData(int section,
         {
           return i18n("User name");
         }
+        case 1:
+        {
+          return i18n("Protocol");
+        }
         default:
         {
           break;
@@ -58,5 +144,5 @@ QVariant AccountProxyModel::headerData(int section,
     }
     return QVariant();
   }
-  return QSortFilterProxyModel::headerData(section, orientation, role);
+  return QIdentityProxyModel::headerData(section, orientation, role);
 }

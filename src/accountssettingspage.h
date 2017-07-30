@@ -23,11 +23,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QWidget>
 
+class QSortFilterProxyModel;
+
 namespace Ui {
 class AccountsSettingsPage;
 }
-
-class AccountProxyModel;
 
 class AccountsSettingsPage : public QWidget
 {
@@ -48,7 +48,7 @@ private slots:
 private:
   Ui::AccountsSettingsPage * ui = nullptr;
 
-  AccountProxyModel * accountProxyModel = nullptr;
+  QSortFilterProxyModel * sortFilterProxyModel = nullptr;
 };
 
 #endif // ACCOUNTSSETTINGSPAGE_H

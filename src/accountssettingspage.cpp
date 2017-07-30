@@ -21,10 +21,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "accountssettingspage.h"
 
 #include <QByteArray>
+#include <QHeaderView>
 #include <QItemSelectionModel>
 #include <QLoggingCategory>
 #include <QModelIndex>
 #include <QPushButton>
+#include <QSortFilterProxyModel>
 #include <QString>
 #include <QTreeView>
 
@@ -53,8 +55,11 @@ AccountsSettingsPage::AccountsSettingsPage(QWidget * parent)
   ui = new Ui::AccountsSettingsPage();
   ui->setupUi(this);
 
-  accountProxyModel = new AccountProxyModel(this);
+  auto accountProxyModel = new AccountProxyModel(this);
   accountProxyModel->setSourceModel(&AccountModel::instance());
+
+  sortFilterProxyModel = new QSortFilterProxyModel(this);
+  sortFilterProxyModel->setSourceModel(accountProxyModel);
 
   delete ui->accountTreeView->itemDelegate();
   ui->accountTreeView
@@ -62,9 +67,12 @@ AccountsSettingsPage::AccountsSettingsPage(QWidget * parent)
   ui->accountTreeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
   ui->accountTreeView->setAlternatingRowColors(true);
   ui->accountTreeView->setRootIsDecorated(false);
-  ui->accountTreeView->setModel(accountProxyModel);
+  ui->accountTreeView->setModel(sortFilterProxyModel);
   ui->accountTreeView->setSortingEnabled(true);
   ui->accountTreeView->sortByColumn(0, Qt::AscendingOrder);
+
+  ui->accountTreeView->header()
+      ->setSectionResizeMode(QHeaderView::ResizeToContents);
 
   connect(ui->accountTreeView->selectionModel(),
           &QItemSelectionModel::currentChanged,
@@ -83,7 +91,7 @@ AccountsSettingsPage::AccountsSettingsPage(QWidget * parent)
 
     auto currentProxyIndex = ui->accountTreeView->currentIndex();
     auto currentSourceIndex
-        = accountProxyModel->mapToSource(currentProxyIndex);
+        = sortFilterProxyModel->mapToSource(currentProxyIndex);
 
     if (account
         == AccountModel::instance()
@@ -112,7 +120,7 @@ void AccountsSettingsPage::on_addPushButton_clicked()
 void AccountsSettingsPage::on_modifyPushButton_clicked()
 {
   auto currentSourceIndex
-      = accountProxyModel->mapToSource(ui->accountTreeView->currentIndex());
+      = sortFilterProxyModel->mapToSource(ui->accountTreeView->currentIndex());
 
   auto account
       = AccountModel::instance().getAccountByModelIndex(currentSourceIndex);
@@ -243,7 +251,7 @@ void AccountsSettingsPage::on_modifyPushButton_clicked()
 void AccountsSettingsPage::on_deletePushButton_clicked()
 {
   auto currentSourceIndex
-      = accountProxyModel->mapToSource(ui->accountTreeView->currentIndex());
+      = sortFilterProxyModel->mapToSource(ui->accountTreeView->currentIndex());
 
   auto account
       = AccountModel::instance().getAccountByModelIndex(currentSourceIndex);
@@ -270,7 +278,7 @@ void AccountsSettingsPage::on_deletePushButton_clicked()
     AccountModel::instance().remove(account);
     AccountModel::instance().save();
 
-    ui->accountTreeView->setCurrentIndex(accountProxyModel->index(0, 0));
+    ui->accountTreeView->setCurrentIndex(sortFilterProxyModel->index(0, 0));
   }
 
   return;
@@ -281,7 +289,8 @@ void AccountsSettingsPage::handleCurrentAccountIndexChange
 {
   Q_UNUSED(previousProxyIndex);
 
-  auto currentSourceIndex = accountProxyModel->mapToSource(currentProxyIndex);
+  auto currentSourceIndex
+      = sortFilterProxyModel->mapToSource(currentProxyIndex);
 
   auto account
       = AccountModel::instance().getAccountByModelIndex(currentSourceIndex);
