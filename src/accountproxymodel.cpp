@@ -20,13 +20,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "accountproxymodel.h"
 
+#include <QColor>
 #include <QModelIndex>
 #include <QString>
 #include <QVariant>
 
+#include <KColorScheme>
 #include <KLocalizedString>
 
-#include <account.h>
 #include <accountmodel.h>
 
 AccountProxyModel::AccountProxyModel(QObject * parent)
@@ -38,6 +39,33 @@ AccountProxyModel::AccountProxyModel(QObject * parent)
 AccountProxyModel::~AccountProxyModel()
 {
   ;
+}
+
+void AccountProxyModel::setSourceModel(QAbstractItemModel * sourceModel)
+{
+  if (sourceModel == this->sourceModel()) {
+    return;
+  }
+
+  auto accountModel = qobject_cast<AccountModel *>(this->sourceModel());
+  if (accountModel) {
+    disconnect(accountModel,
+               &AccountModel::accountStateChanged,
+               this,
+               &AccountProxyModel::handleAccountStateChange);
+  }
+
+  accountModel = qobject_cast<AccountModel *>(sourceModel);
+  if (accountModel) {
+    connect(accountModel,
+            &AccountModel::accountStateChanged,
+            this,
+            &AccountProxyModel::handleAccountStateChange);
+  }
+
+  QIdentityProxyModel::setSourceModel(sourceModel);
+
+  return;
 }
 
 QModelIndex AccountProxyModel::index(int row,
@@ -56,6 +84,7 @@ QModelIndex AccountProxyModel::index(int row,
         break;
       }
       case 1:
+      case 2:
       {
         return createIndex(row, column);
       }
@@ -72,7 +101,7 @@ int AccountProxyModel::columnCount(const QModelIndex & parent) const
 {
   auto accountModel = qobject_cast<AccountModel *>(sourceModel());
   if (accountModel) {
-    return 2;
+    return 3;
   }
   return QIdentityProxyModel::columnCount(parent);
 }
@@ -85,33 +114,96 @@ QVariant AccountProxyModel::data(const QModelIndex & index, int role) const
 
   auto accountModel = qobject_cast<AccountModel *>(sourceModel());
   if (accountModel && (index.column() > 0)) {
-    if (role == Qt::DisplayRole) {
-      auto accountIndex = QIdentityProxyModel::index(index.row(), 0);
-      auto account = accountModel->getAccountByModelIndex(accountIndex);
-      if (account) {
-        switch (index.column()) {
-          case 1:
-          {
-            switch (account->protocol()) {
-              case Account::Protocol::SIP:
-              {
-                return QStringLiteral("SIP");
+    auto accountIndex = QIdentityProxyModel::index(index.row(), 0);
+    auto account = accountModel->getAccountByModelIndex(accountIndex);
+    if (account) {
+      switch (role) {
+        case Qt::DisplayRole:
+        {
+          switch (index.column()) {
+            case 1:
+            {
+              switch (account->protocol()) {
+                case Account::Protocol::SIP:
+                {
+                  return QStringLiteral("SIP");
+                }
+                case Account::Protocol::RING:
+                {
+                  return QStringLiteral("Ring");
+                }
+                default:
+                {
+                  break;
+                }
               }
-              case Account::Protocol::RING:
-              {
-                return QStringLiteral("Ring");
-              }
-              default:
-              {
-                break;
-              }
+              break;
             }
-            break;
+            case 2:
+            {
+              return account->toHumanStateName();
+            }
+            default:
+            {
+              break;
+            }
           }
-          default:
-          {
-            break;
+          break;
+        }
+        case Qt::TextColorRole:
+        {
+          switch (index.column()) {
+            case 2:
+            {
+              KColorScheme colorScheme(QPalette::Active);
+              switch (account->registrationState()) {
+                case Account::RegistrationState::READY:
+                {
+                  return colorScheme
+                      .foreground(KColorScheme::PositiveText)
+                      .color();
+                }
+                case Account::RegistrationState::UNREGISTERED:
+                {
+                  return colorScheme
+                      .foreground(KColorScheme::InactiveText)
+                      .color();
+                }
+                case Account::RegistrationState::INITIALIZING:
+                {
+                  return colorScheme
+                      .foreground(KColorScheme::ActiveText)
+                      .color();
+                }
+                case Account::RegistrationState::TRYING:
+                {
+                  return colorScheme
+                      .foreground(KColorScheme::NeutralText)
+                      .color();
+                }
+                case Account::RegistrationState::ERROR:
+                {
+                  return colorScheme
+                      .foreground(KColorScheme::NegativeText)
+                      .color();
+                }
+                default:
+                {
+                  break;
+                }
+              }
+              break;
+            }
+            default:
+            {
+              break;
+            }
           }
+          break;
+        }
+        default:
+        {
+          break;
         }
       }
     }
@@ -136,6 +228,10 @@ QVariant AccountProxyModel::headerData(int section,
         {
           return i18n("Protocol");
         }
+        case 2:
+        {
+          return i18n("State");
+        }
         default:
         {
           break;
@@ -145,4 +241,16 @@ QVariant AccountProxyModel::headerData(int section,
     return QVariant();
   }
   return QIdentityProxyModel::headerData(section, orientation, role);
+}
+
+void AccountProxyModel::handleAccountStateChange
+(Account * account, const Account::RegistrationState state)
+{
+  Q_UNUSED(state);
+
+  auto accountStateIndex = createIndex(account->index().row(), 2);
+
+  emit dataChanged(accountStateIndex, accountStateIndex);
+
+  return;
 }

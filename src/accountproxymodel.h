@@ -23,6 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QIdentityProxyModel>
 
+#include <account.h>
+
 class AccountProxyModel : public QIdentityProxyModel
 {
   Q_OBJECT
@@ -32,6 +34,8 @@ public:
   ~AccountProxyModel();
 
 public:
+  void setSourceModel(QAbstractItemModel * sourceModel) override;
+
   QModelIndex index(int row,
                     int column,
                     const QModelIndex & parent = QModelIndex()) const override;
@@ -44,6 +48,10 @@ public:
   QVariant headerData(int section,
                       Qt::Orientation orientation,
                       int role = Qt::DisplayRole) const override;
+
+public slots:
+  void handleAccountStateChange(Account * account,
+                                const Account::RegistrationState state);
 };
 
 #endif // ACCOUNTPROXYMODEL_H
