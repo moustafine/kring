@@ -31,8 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "kringapplication.h"
 #include "kringwindow.h"
 
-Q_DECLARE_LOGGING_CATEGORY(KRING)
-Q_LOGGING_CATEGORY(KRING, "kring")
+Q_LOGGING_CATEGORY(kring, "kring")
 
 int main(int argc, char ** argv)
 {

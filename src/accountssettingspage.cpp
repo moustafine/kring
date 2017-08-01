@@ -47,7 +47,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ringaccountgeneralsettingspage.h"
 #include "ringaccountsettings.h"
 
-Q_DECLARE_LOGGING_CATEGORY(KRING)
+Q_DECLARE_LOGGING_CATEGORY(kring)
 
 AccountsSettingsPage::AccountsSettingsPage(QWidget * parent)
   : QWidget(parent)
@@ -126,7 +126,7 @@ void AccountsSettingsPage::on_modifyPushButton_clicked()
       = AccountModel::instance().getAccountByModelIndex(currentSourceIndex);
 
   if (!account) {
-    qCCritical(KRING, "Failed to get account.");
+    qCWarning(kring, "Failed to get account.");
     return;
   }
 
@@ -159,9 +159,9 @@ void AccountsSettingsPage::on_modifyPushButton_clicked()
 
   if (!accountGeneralSettingsPage) {
     delete accountSettingsDialog;
-    qCCritical(KRING,
-               "Failed to create a settings page for account \"%s\".",
-               qUtf8Printable(account->alias()));
+    qCWarning(kring,
+              "Failed to create a settings page for account \"%s\".",
+              qUtf8Printable(account->alias()));
     return;
   }
 
@@ -257,7 +257,7 @@ void AccountsSettingsPage::on_deletePushButton_clicked()
       = AccountModel::instance().getAccountByModelIndex(currentSourceIndex);
 
   if (!account) {
-    qCCritical(KRING, "Failed to get account.");
+    qCWarning(kring, "Failed to get account.");
     return;
   }
 

@@ -50,7 +50,6 @@ void KringWidget::slotSwitchColors()
 
 void KringWidget::loadSettings()
 {
-  qCDebug(KRING) << "KringWidget::loadSettings()";
   QPalette palette;
   palette.setColor(QPalette::Window, KringSettings::color_background());
   palette.setColor(QPalette::WindowText, KringSettings::color_foreground());

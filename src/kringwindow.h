@@ -21,19 +21,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef KRINGWINDOW_H
 #define KRINGWINDOW_H
 
-#include <QLoggingCategory>
-
 #include <KXmlGuiWindow>
-
-#include "kringsettings.h"
 
 class QEvent;
 
 class KStatusNotifierItem;
 
 class KringWidget;
-
-Q_DECLARE_LOGGING_CATEGORY(KRING)
 
 class KringWindow : public KXmlGuiWindow
 {

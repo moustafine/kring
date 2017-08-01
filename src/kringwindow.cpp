@@ -49,7 +49,7 @@ KringWindow::KringWindow()
   KStandardAction::close(this,
                          &KringWindow::close,
                          actionCollection());
-  KStandardAction::quit(qApp,
+  KStandardAction::quit(QCoreApplication::instance(),
                         &QCoreApplication::quit,
                         actionCollection());
   KStandardAction::preferences(this,
@@ -71,7 +71,7 @@ const KStatusNotifierItem * KringWindow::getSystemTrayIcon() const
 
 bool KringWindow::event(QEvent * event)
 {
-  if (event->type() == QEvent::WindowStateChange
+  if ((event->type() == QEvent::WindowStateChange)
       && isMinimized()
       && KringSettings::systemTrayIconEnabled()
       && KringSettings::windowHidingOnMinimize()
@@ -84,7 +84,6 @@ bool KringWindow::event(QEvent * event)
 
 bool KringWindow::queryClose()
 {
-  qCDebug(KRING) << "KringWindow::queryClose()";
   if (KringSettings::systemTrayIconEnabled()
       && KringSettings::windowHidingOnClose()
       && systemTrayIcon) {
@@ -97,16 +96,13 @@ bool KringWindow::queryClose()
 
 void KringWindow::showSettingsDialog()
 {
-  qCDebug(KRING) << "KringWindow::showSettingsDialog()";
-
   if (KConfigDialog::showDialog(QStringLiteral("settings"))) {
     return;
   }
 
-  KConfigDialog * settingsDialog
-      = new KConfigDialog(this,
-                          QStringLiteral("settings"),
-                          KringSettings::self());
+  auto settingsDialog = new KConfigDialog(this,
+                                          QStringLiteral("settings"),
+                                          KringSettings::self());
   settingsDialog->addPage(new GeneralSettingsPage(),
                           i18n("General"),
                           QStringLiteral("preferences-system-windows"));
@@ -138,7 +134,6 @@ void KringWindow::loadSettings()
     }
   } else {
     if (systemTrayIcon) {
-      systemTrayIcon->setParent(nullptr);
       delete systemTrayIcon;
       systemTrayIcon = nullptr;
     }

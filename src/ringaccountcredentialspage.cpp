@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ringaccountcredentialspage.h"
 
 #include <QCheckBox>
+#include <QColor>
 #include <QLabel>
 #include <QLineEdit>
 #include <QRegularExpression>
@@ -44,7 +45,7 @@ RingAccountCredentialsPage::RingAccountCredentialsPage(QWidget * parent)
 
   QRegularExpression userNameRegularExpression
       (QStringLiteral("[A-Za-z0-9]+(-?[A-Za-z0-9]+)*"));
-  QValidator * userNameValidator
+  auto userNameValidator
       = new QRegularExpressionValidator(userNameRegularExpression, this);
   ui->userNameLineEdit->setValidator(userNameValidator);
   ui->userNameLineEdit->setText(qgetenv("USER"));

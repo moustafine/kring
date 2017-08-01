@@ -31,16 +31,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 KringApplication::KringApplication(int & argc, char ** argv)
   : QApplication(argc, argv)
 {
-  setOrganizationDomain("example.org");
+  setOrganizationDomain(QStringLiteral("example.org"));
 
-  KDBusService * service = new KDBusService(KDBusService::Unique, this);
+  auto * service = new KDBusService(KDBusService::Unique, this);
   connect(service,
           &KDBusService::activateRequested,
           this,
           [this]()
   {
-    if (window) {
-      KWindowSystem::forceActiveWindow(window->winId());
+    if (mainWindow) {
+      KWindowSystem::forceActiveWindow(mainWindow->winId());
     }
     return;
   });
@@ -48,8 +48,8 @@ KringApplication::KringApplication(int & argc, char ** argv)
 
 KringApplication::~KringApplication()
 {
-  if (window) {
-    delete window;
+  if (mainWindow) {
+    delete mainWindow;
   };
 
   delete &CallModel::instance();
@@ -57,28 +57,38 @@ KringApplication::~KringApplication()
 
 void KringApplication::setMainWindow(KringWindow * window)
 {
-  if (window) {
-    this->window = window;
+  if (mainWindow == window) {
+    return;
+  }
 
-    connect(window,
-            &KringWindow::destroyed,
+  if (mainWindow) {
+    mainWindow->disconnect(this);
+  }
+
+  mainWindow = window;
+
+  if (mainWindow) {
+    connect(mainWindow,
+            &QObject::destroyed,
             this,
             [this]()
     {
-      this->window = nullptr;
+      mainWindow = nullptr;
       return;
     });
   }
+
   return;
 }
 
 void KringApplication::show()
 {
-  if (window) {
-    if (KringSettings::windowHidingOnStart() && window->getSystemTrayIcon()) {
-      window->hide();
+  if (mainWindow) {
+    if (KringSettings::windowHidingOnStart()
+        && mainWindow->getSystemTrayIcon()) {
+      mainWindow->hide();
     } else {
-      window->show();
+      mainWindow->show();
     }
   }
   return;

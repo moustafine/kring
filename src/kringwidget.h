@@ -21,14 +21,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef KRINGWIDGET_H
 #define KRINGWIDGET_H
 
-#include <QLoggingCategory>
 #include <QWidget>
 
 namespace Ui {
 class KringWidget;
 }
-
-Q_DECLARE_LOGGING_CATEGORY(KRING)
 
 class KringWidget : public QWidget
 {

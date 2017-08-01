@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "ringaccountgeneralsettingspage.h"
 
+#include <QColor>
 #include <QFontDatabase>
 #include <QGroupBox>
 #include <QHBoxLayout>
@@ -44,7 +45,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "authenticationdialog.h"
 
-Q_DECLARE_LOGGING_CATEGORY(KRING)
+Q_DECLARE_LOGGING_CATEGORY(kring)
 
 RingAccountGeneralSettingsPage::RingAccountGeneralSettingsPage
 (Account & account, QWidget * parent)
@@ -60,7 +61,7 @@ RingAccountGeneralSettingsPage::RingAccountGeneralSettingsPage
 
   QRegularExpression userNameRegularExpression
       (QStringLiteral("[A-Za-z0-9]+(-?[A-Za-z0-9]+)*"));
-  QValidator * userNameValidator
+  auto userNameValidator
       = new QRegularExpressionValidator(userNameRegularExpression, this);
   ui->kcfg_userName->setValidator(userNameValidator);
 
@@ -126,7 +127,7 @@ RingAccountGeneralSettingsPage::RingAccountGeneralSettingsPage
         return;
       }
 
-      bool publicUserNameRegistrationStarted
+      auto publicUserNameRegistrationStarted
           = account.registerName(authenticationDialog.getPassword(),
                                  publicUserNameLineEdit->text());
 
@@ -257,7 +258,7 @@ void RingAccountGeneralSettingsPage::setRegisteredPublicUserNameLabel
                                Qt::FindDirectChildrenOnly);
 
   if (!publicUserNameGroupBox) {
-    qCWarning(KRING,
+    qCWarning(kring,
               "Failed to get object by name \"%s\".",
               qUtf8Printable(publicUserNameGroupBoxName));
     return;

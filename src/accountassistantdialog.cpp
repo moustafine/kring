@@ -180,7 +180,7 @@ void AccountAssistantDialog::handleAccountStateChange
 
       if (ringAccountCredentialsPage
           ->isPublicUserNameRegistrationRequested()) {
-        bool publicUserNameRegistrationStarted
+        auto publicUserNameRegistrationStarted
             = account->registerName(ringAccountCredentialsPage->getPassword(),
                                     ringAccountCredentialsPage->getUserName());
         if (publicUserNameRegistrationStarted) {
