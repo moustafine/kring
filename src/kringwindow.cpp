@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "kringwindow.h"
 
+#include <QCoreApplication>
 #include <QEvent>
 
 #include <KActionCollection>
@@ -90,10 +91,10 @@ bool KringWindow::queryClose()
       && KringSettings::windowHidingOnClose()
       && systemTrayIcon) {
     hide();
-    return false;
   } else {
-    return true;
+    QCoreApplication::quit();
   }
+  return false;
 }
 
 void KringWindow::showSettingsDialog()
