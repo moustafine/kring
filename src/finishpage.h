@@ -18,37 +18,40 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ACCOUNTSSETTINGSPAGE_H
-#define ACCOUNTSSETTINGSPAGE_H
+#ifndef FINISHPAGE_H
+#define FINISHPAGE_H
 
 #include <QWidget>
 
-class QSortFilterProxyModel;
+class QLayoutItem;
 
 namespace Ui {
-class AccountsSettingsPage;
+class FinishPage;
 }
 
-class AccountsSettingsPage : public QWidget
+class FinishPage : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit AccountsSettingsPage(QWidget * parent = nullptr);
-  ~AccountsSettingsPage();
+  explicit FinishPage(QWidget * parent = nullptr);
+  ~FinishPage();
 
-private slots:
-  void on_addPushButton_clicked();
-  void on_modifyPushButton_clicked();
-  void on_deletePushButton_clicked();
+public:
+  void addWidget(QWidget * widget,
+                 int stretch = 0,
+                 Qt::Alignment alignment = Qt::Alignment());
+  void addItem(QLayoutItem * layoutItem);
 
-  void handleCurrentAccountIndexChange(const QModelIndex & currentProxyIndex,
-                                       const QModelIndex & previousProxyIndex);
+  void insertWidget(int index,
+                    QWidget * widget,
+                    int stretch = 0,
+                    Qt::Alignment alignment = Qt::Alignment());
+  void insertItem(int index, QLayoutItem * layoutItem);
 
+  int getItemCount() const;
 private:
-  Ui::AccountsSettingsPage * ui = nullptr;
-
-  QSortFilterProxyModel * sortFilterProxyModel = nullptr;
+  Ui::FinishPage * ui = nullptr;
 };
 
-#endif // ACCOUNTSSETTINGSPAGE_H
+#endif // FINISHPAGE_H

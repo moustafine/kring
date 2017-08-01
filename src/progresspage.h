@@ -18,37 +18,25 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ACCOUNTSSETTINGSPAGE_H
-#define ACCOUNTSSETTINGSPAGE_H
+#ifndef PROGRESSPAGE_H
+#define PROGRESSPAGE_H
 
 #include <QWidget>
 
-class QSortFilterProxyModel;
-
 namespace Ui {
-class AccountsSettingsPage;
+class ProgressPage;
 }
 
-class AccountsSettingsPage : public QWidget
+class ProgressPage : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit AccountsSettingsPage(QWidget * parent = nullptr);
-  ~AccountsSettingsPage();
-
-private slots:
-  void on_addPushButton_clicked();
-  void on_modifyPushButton_clicked();
-  void on_deletePushButton_clicked();
-
-  void handleCurrentAccountIndexChange(const QModelIndex & currentProxyIndex,
-                                       const QModelIndex & previousProxyIndex);
+  explicit ProgressPage(QWidget * parent = nullptr);
+  ~ProgressPage();
 
 private:
-  Ui::AccountsSettingsPage * ui = nullptr;
-
-  QSortFilterProxyModel * sortFilterProxyModel = nullptr;
+  Ui::ProgressPage * ui = nullptr;
 };
 
-#endif // ACCOUNTSSETTINGSPAGE_H
+#endif // PROGRESSPAGE_H

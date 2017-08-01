@@ -1,17 +1,33 @@
 set(kring_SRCS
+  abstractsettingspage.cpp
+  accountassistantdialog.cpp
+  accountdelegate.cpp
+  accountproxymodel.cpp
+  accountsettings.cpp
   accountssettingspage.cpp
+  authenticationdialog.cpp
+  finishpage.cpp
   generalsettingspage.cpp
   kringapplication.cpp
   kringwidget.cpp
   kringwindow.cpp
   main.cpp
+  progresspage.cpp
+  ringaccountcredentialspage.cpp
+  ringaccountgeneralsettingspage.cpp
+  ringaccountsettings.cpp
 )
 
 kconfig_add_kcfg_files(kring_SRCS kringsettings.kcfgc)
 ki18n_wrap_ui(kring_SRCS
   accountssettingspage.ui
+  authenticationdialog.ui
+  finishpage.ui
   generalsettingspage.ui
   kringwidget.ui
+  progresspage.ui
+  ringaccountcredentialspage.ui
+  ringaccountgeneralsettingspage.ui
 )
 
 include_directories(${LIB_RING_CLIENT_INCLUDE_DIR})

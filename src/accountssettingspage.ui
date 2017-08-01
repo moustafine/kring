@@ -6,13 +6,60 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>274</width>
+    <width>362</width>
     <height>210</height>
    </rect>
   </property>
   <layout class="QHBoxLayout">
    <item>
-    <widget class="QListView" name="accountListView"/>
+    <widget class="QTreeView" name="accountTreeView"/>
+   </item>
+   <item>
+    <layout class="QVBoxLayout">
+     <item>
+      <widget class="QPushButton" name="addPushButton">
+       <property name="text">
+        <string>Add...</string>
+       </property>
+       <property name="icon">
+        <iconset theme="list-add"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="modifyPushButton">
+       <property name="text">
+        <string>Modify...</string>
+       </property>
+       <property name="icon">
+        <iconset theme="entry-edit"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="deletePushButton">
+       <property name="text">
+        <string>Delete</string>
+       </property>
+       <property name="icon">
+        <iconset theme="entry-delete"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

@@ -18,37 +18,24 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ACCOUNTSSETTINGSPAGE_H
-#define ACCOUNTSSETTINGSPAGE_H
+#ifndef ACCOUNTDELEGATE_H
+#define ACCOUNTDELEGATE_H
 
-#include <QWidget>
+#include <QStyledItemDelegate>
 
-class QSortFilterProxyModel;
-
-namespace Ui {
-class AccountsSettingsPage;
-}
-
-class AccountsSettingsPage : public QWidget
+class AccountDelegate : public QStyledItemDelegate
 {
   Q_OBJECT
 
 public:
-  explicit AccountsSettingsPage(QWidget * parent = nullptr);
-  ~AccountsSettingsPage();
+  explicit AccountDelegate(QObject * parent = nullptr);
+  ~AccountDelegate();
 
-private slots:
-  void on_addPushButton_clicked();
-  void on_modifyPushButton_clicked();
-  void on_deletePushButton_clicked();
-
-  void handleCurrentAccountIndexChange(const QModelIndex & currentProxyIndex,
-                                       const QModelIndex & previousProxyIndex);
-
-private:
-  Ui::AccountsSettingsPage * ui = nullptr;
-
-  QSortFilterProxyModel * sortFilterProxyModel = nullptr;
+protected:
+  bool editorEvent(QEvent * event,
+                   QAbstractItemModel * model,
+                   const QStyleOptionViewItem & option,
+                   const QModelIndex & index) override;
 };
 
-#endif // ACCOUNTSSETTINGSPAGE_H
+#endif // ACCOUNTDELEGATE_H

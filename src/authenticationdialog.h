@@ -18,37 +18,30 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ACCOUNTSSETTINGSPAGE_H
-#define ACCOUNTSSETTINGSPAGE_H
+#ifndef AUTHENTICATIONDIALOG_H
+#define AUTHENTICATIONDIALOG_H
 
-#include <QWidget>
+#include <QDialog>
 
-class QSortFilterProxyModel;
+class QString;
 
 namespace Ui {
-class AccountsSettingsPage;
+class AuthenticationDialog;
 }
 
-class AccountsSettingsPage : public QWidget
+class AuthenticationDialog : public QDialog
 {
   Q_OBJECT
 
 public:
-  explicit AccountsSettingsPage(QWidget * parent = nullptr);
-  ~AccountsSettingsPage();
+  explicit AuthenticationDialog(QWidget * parent = nullptr);
+  ~AuthenticationDialog();
 
-private slots:
-  void on_addPushButton_clicked();
-  void on_modifyPushButton_clicked();
-  void on_deletePushButton_clicked();
-
-  void handleCurrentAccountIndexChange(const QModelIndex & currentProxyIndex,
-                                       const QModelIndex & previousProxyIndex);
+public:
+  QString getPassword() const;
 
 private:
-  Ui::AccountsSettingsPage * ui = nullptr;
-
-  QSortFilterProxyModel * sortFilterProxyModel = nullptr;
+  Ui::AuthenticationDialog * ui = nullptr;
 };
 
-#endif // ACCOUNTSSETTINGSPAGE_H
+#endif // AUTHENTICATIONDIALOG_H
