@@ -110,7 +110,7 @@ AccountsSettingsPage::~AccountsSettingsPage()
 
 void AccountsSettingsPage::on_addPushButton_clicked()
 {
-  auto accountAssistantDialog = new AccountAssistantDialog(this);
+  auto accountAssistantDialog = new AccountAssistantDialog();
   accountAssistantDialog->setAttribute(Qt::WA_DeleteOnClose);
   accountAssistantDialog->show();
 

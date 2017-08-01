@@ -23,6 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KDBusService>
 #include <KWindowSystem>
 
+#include <callmodel.h>
+
 #include "kringsettings.h"
 #include "kringwindow.h"
 
@@ -49,6 +51,8 @@ KringApplication::~KringApplication()
   if (window) {
     delete window;
   };
+
+  delete &CallModel::instance();
 }
 
 void KringApplication::setMainWindow(KringWindow * window)

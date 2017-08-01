@@ -28,8 +28,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KLocalizedString>
 #include <KStatusNotifierItem>
 
-#include <callmodel.h>
-
 #include "accountssettingspage.h"
 #include "generalsettingspage.h"
 #include "kringsettings.h"
@@ -63,7 +61,7 @@ KringWindow::KringWindow()
 
 KringWindow::~KringWindow()
 {
-  delete &CallModel::instance();
+  ;
 }
 
 const KStatusNotifierItem * KringWindow::getSystemTrayIcon() const
