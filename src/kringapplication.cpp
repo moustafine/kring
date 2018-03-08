@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -28,17 +28,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "kringsettings.h"
 #include "kringwindow.h"
 
-KringApplication::KringApplication(int & argc, char ** argv)
+KringApplication::KringApplication(int& argc, char** argv)
   : QApplication(argc, argv)
 {
   setOrganizationDomain(QStringLiteral("example.org"));
 
-  auto * service = new KDBusService(KDBusService::Unique, this);
-  connect(service,
-          &KDBusService::activateRequested,
-          this,
-          [this]()
-  {
+  auto* service = new KDBusService(KDBusService::Unique, this);
+  connect(service, &KDBusService::activateRequested, this, [this]() {
     if (mainWindow) {
       KWindowSystem::forceActiveWindow(mainWindow->winId());
     }
@@ -55,7 +51,8 @@ KringApplication::~KringApplication()
   delete &CallModel::instance();
 }
 
-void KringApplication::setMainWindow(KringWindow * window)
+void
+KringApplication::setMainWindow(KringWindow* window)
 {
   if (mainWindow == window) {
     return;
@@ -68,11 +65,7 @@ void KringApplication::setMainWindow(KringWindow * window)
   mainWindow = window;
 
   if (mainWindow) {
-    connect(mainWindow,
-            &QObject::destroyed,
-            this,
-            [this]()
-    {
+    connect(mainWindow, &QObject::destroyed, this, [this]() {
       mainWindow = nullptr;
       return;
     });
@@ -81,11 +74,12 @@ void KringApplication::setMainWindow(KringWindow * window)
   return;
 }
 
-void KringApplication::show()
+void
+KringApplication::show()
 {
   if (mainWindow) {
-    if (KringSettings::windowHidingOnStart()
-        && mainWindow->getSystemTrayIcon()) {
+    if (KringSettings::windowHidingOnStart() &&
+        mainWindow->getSystemTrayIcon()) {
       mainWindow->hide();
     } else {
       mainWindow->show();

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -37,10 +37,10 @@ public:
   KringWindow();
   ~KringWindow();
 
-  const KStatusNotifierItem * getSystemTrayIcon() const;
+  const KStatusNotifierItem* getSystemTrayIcon() const;
 
 protected:
-  bool event(QEvent * event) override;
+  bool event(QEvent* event) override;
   bool queryClose() override;
 
 private slots:
@@ -49,10 +49,10 @@ private slots:
   void loadSettings();
 
 private:
-  KringWidget * kringWidget = nullptr;
-  KStatusNotifierItem * systemTrayIcon = nullptr;
+  KringWidget* kringWidget = nullptr;
+  KStatusNotifierItem* systemTrayIcon = nullptr;
 
-  QAction * switchAction = nullptr;
+  QAction* switchAction = nullptr;
 };
 
 #endif // KRINGWINDOW_H

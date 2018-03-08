@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -38,23 +38,18 @@ KringWindow::KringWindow()
 {
   kringWidget = new KringWidget(this);
   setCentralWidget(kringWidget);
-  switchAction
-      = actionCollection()->addAction(QStringLiteral("switch_action"));
+  switchAction = actionCollection()->addAction(QStringLiteral("switch_action"));
   switchAction->setText(i18n("Switch Colors"));
   switchAction->setIcon(QIcon::fromTheme(QStringLiteral("fill-color")));
   connect(switchAction,
           &QAction::triggered,
           kringWidget,
           &KringWidget::slotSwitchColors);
-  KStandardAction::close(this,
-                         &KringWindow::close,
-                         actionCollection());
-  KStandardAction::quit(QCoreApplication::instance(),
-                        &QCoreApplication::quit,
-                        actionCollection());
-  KStandardAction::preferences(this,
-                               &KringWindow::showSettingsDialog,
-                               actionCollection());
+  KStandardAction::close(this, &KringWindow::close, actionCollection());
+  KStandardAction::quit(
+    QCoreApplication::instance(), &QCoreApplication::quit, actionCollection());
+  KStandardAction::preferences(
+    this, &KringWindow::showSettingsDialog, actionCollection());
   setupGUI();
   loadSettings();
 }
@@ -64,29 +59,29 @@ KringWindow::~KringWindow()
   ;
 }
 
-const KStatusNotifierItem * KringWindow::getSystemTrayIcon() const
+const KStatusNotifierItem*
+KringWindow::getSystemTrayIcon() const
 {
   return systemTrayIcon;
 }
 
-bool KringWindow::event(QEvent * event)
+bool
+KringWindow::event(QEvent* event)
 {
-  if ((event->type() == QEvent::WindowStateChange)
-      && isMinimized()
-      && KringSettings::systemTrayIconEnabled()
-      && KringSettings::windowHidingOnMinimize()
-      && systemTrayIcon) {
+  if ((event->type() == QEvent::WindowStateChange) && isMinimized() &&
+      KringSettings::systemTrayIconEnabled() &&
+      KringSettings::windowHidingOnMinimize() && systemTrayIcon) {
     hide();
     return true;
   }
   return KXmlGuiWindow::event(event);
 }
 
-bool KringWindow::queryClose()
+bool
+KringWindow::queryClose()
 {
-  if (KringSettings::systemTrayIconEnabled()
-      && KringSettings::windowHidingOnClose()
-      && systemTrayIcon) {
+  if (KringSettings::systemTrayIconEnabled() &&
+      KringSettings::windowHidingOnClose() && systemTrayIcon) {
     hide();
   } else {
     QCoreApplication::quit();
@@ -94,15 +89,15 @@ bool KringWindow::queryClose()
   return false;
 }
 
-void KringWindow::showSettingsDialog()
+void
+KringWindow::showSettingsDialog()
 {
   if (KConfigDialog::showDialog(QStringLiteral("settings"))) {
     return;
   }
 
-  auto settingsDialog = new KConfigDialog(this,
-                                          QStringLiteral("settings"),
-                                          KringSettings::self());
+  auto settingsDialog =
+    new KConfigDialog(this, QStringLiteral("settings"), KringSettings::self());
   settingsDialog->addPage(new GeneralSettingsPage(),
                           i18n("General"),
                           QStringLiteral("preferences-system-windows"));
@@ -121,16 +116,16 @@ void KringWindow::showSettingsDialog()
   return;
 }
 
-void KringWindow::loadSettings()
+void
+KringWindow::loadSettings()
 {
   if (KringSettings::systemTrayIconEnabled()) {
     if (!systemTrayIcon) {
       systemTrayIcon = new KStatusNotifierItem(this);
       systemTrayIcon->setCategory(KStatusNotifierItem::ApplicationStatus);
       systemTrayIcon->setIconByName(QStringLiteral("kring"));
-      systemTrayIcon->setToolTip(QStringLiteral("kring"),
-                                 i18n("Kring"),
-                                 i18n("A client for Ring"));
+      systemTrayIcon->setToolTip(
+        QStringLiteral("kring"), i18n("Kring"), i18n("A client for Ring"));
     }
   } else {
     if (systemTrayIcon) {

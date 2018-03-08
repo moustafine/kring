@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -28,7 +28,7 @@ class AbstractSettingsPage : public QWidget
   Q_OBJECT
 
 public:
-  explicit AbstractSettingsPage(QWidget * parent = nullptr);
+  explicit AbstractSettingsPage(QWidget* parent = nullptr);
   ~AbstractSettingsPage();
 
 public:

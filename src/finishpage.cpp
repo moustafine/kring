@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "ui_finishpage.h"
 
-FinishPage::FinishPage(QWidget * parent)
+FinishPage::FinishPage(QWidget* parent)
   : QWidget(parent)
 {
   ui = new Ui::FinishPage();
@@ -37,36 +37,39 @@ FinishPage::~FinishPage()
   delete ui;
 }
 
-void FinishPage::addWidget(QWidget * widget,
-                           int stretch,
-                           Qt::Alignment alignment)
+void
+FinishPage::addWidget(QWidget* widget, int stretch, Qt::Alignment alignment)
 {
   ui->vboxLayout->addWidget(widget, stretch, alignment);
   return;
 }
 
-void FinishPage::addItem(QLayoutItem * layoutItem)
+void
+FinishPage::addItem(QLayoutItem* layoutItem)
 {
   ui->vboxLayout->addItem(layoutItem);
   return;
 }
 
-void FinishPage::insertWidget(int index,
-                              QWidget * widget,
-                              int stretch,
-                              Qt::Alignment alignment)
+void
+FinishPage::insertWidget(int index,
+                         QWidget* widget,
+                         int stretch,
+                         Qt::Alignment alignment)
 {
   ui->vboxLayout->insertWidget(index, widget, stretch, alignment);
   return;
 }
 
-void FinishPage::insertItem(int index, QLayoutItem * layoutItem)
+void
+FinishPage::insertItem(int index, QLayoutItem* layoutItem)
 {
   ui->vboxLayout->insertItem(index, layoutItem);
   return;
 }
 
-int FinishPage::getItemCount() const
+int
+FinishPage::getItemCount() const
 {
   return ui->vboxLayout->count();
 }

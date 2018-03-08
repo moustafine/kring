@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -23,14 +23,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QIcon>
 #include <QLabel>
 #include <QLineEdit>
-#include <QStyleOption>
 #include <QPixmap>
+#include <QStyleOption>
 
 #include <KLocalizedString>
 
 #include "ui_authenticationdialog.h"
 
-AuthenticationDialog::AuthenticationDialog(QWidget * parent)
+AuthenticationDialog::AuthenticationDialog(QWidget* parent)
   : QDialog(parent)
 {
   setWindowTitle(i18n("Authentication"));
@@ -42,9 +42,8 @@ AuthenticationDialog::AuthenticationDialog(QWidget * parent)
   styleOption.initFrom(this);
 
   auto pixmap = QIcon::fromTheme(QStringLiteral("dialog-password"))
-      .pixmap(style()->pixelMetric(QStyle::PM_MessageBoxIconSize,
-                                   &styleOption,
-                                   this));
+                  .pixmap(style()->pixelMetric(
+                    QStyle::PM_MessageBoxIconSize, &styleOption, this));
 
   ui->iconLabel->setPixmap(pixmap);
 
@@ -56,7 +55,8 @@ AuthenticationDialog::~AuthenticationDialog()
   delete ui;
 }
 
-QString AuthenticationDialog::getPassword() const
+QString
+AuthenticationDialog::getPassword() const
 {
   return ui->passwordLineEdit->text();
 }

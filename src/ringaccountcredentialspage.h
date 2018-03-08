@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -38,7 +38,7 @@ class RingAccountCredentialsPage : public AbstractSettingsPage
   Q_OBJECT
 
 public:
-  explicit RingAccountCredentialsPage(QWidget * parent = nullptr);
+  explicit RingAccountCredentialsPage(QWidget* parent = nullptr);
   ~RingAccountCredentialsPage();
 
 public:
@@ -52,7 +52,7 @@ public:
   bool isPublicUserNameRegistrationRequested() const;
 
 signals:
-  void valid(QWidget * page, bool valid);
+  void valid(QWidget* page, bool valid);
 
 private:
   void updateUi();
@@ -61,13 +61,13 @@ private slots:
   void validateUserName();
   void validatePassword();
   void handleRegisterPublicUserNameCheckBoxStateChange(int state);
-  void validatePublicUserName(const Account * account,
+  void validatePublicUserName(const Account* account,
                               NameDirectory::LookupStatus status,
-                              const QString & address,
-                              const QString & name);
+                              const QString& address,
+                              const QString& name);
 
 private:
-  Ui::RingAccountCredentialsPage * ui = nullptr;
+  Ui::RingAccountCredentialsPage* ui = nullptr;
 
   bool userNameValid = false;
   bool passwordValid = false;

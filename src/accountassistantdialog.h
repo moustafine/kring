@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -36,35 +36,36 @@ class AccountAssistantDialog : public KAssistantDialog
   Q_OBJECT
 
 public:
-  explicit AccountAssistantDialog(QWidget * parent = nullptr,
+  explicit AccountAssistantDialog(QWidget* parent = nullptr,
                                   Qt::WindowFlags flag = Qt::WindowFlags());
   ~AccountAssistantDialog();
 
 public slots:
-  void handleCurrentPageChange(KPageWidgetItem * currentPageItem,
-                               KPageWidgetItem * previousPageItem);
-  void setValidPage(QWidget * page, bool valid);
+  void handleCurrentPageChange(KPageWidgetItem* currentPageItem,
+                               KPageWidgetItem* previousPageItem);
+  void setValidPage(QWidget* page, bool valid);
 
 protected:
-  void closeEvent(QCloseEvent * event) override;
+  void closeEvent(QCloseEvent* event) override;
 
 private:
   void createRingAccount();
 
 private slots:
   void handleAccountStateChange(Account::RegistrationState state);
-  void handlePublicUserNameRegistrationEnd
-  (NameDirectory::RegisterNameStatus status, const QString & name);
+  void handlePublicUserNameRegistrationEnd(
+    NameDirectory::RegisterNameStatus status,
+    const QString& name);
 
 private:
-  RingAccountCredentialsPage * ringAccountCredentialsPage = nullptr;
-  FinishPage * finishPage = nullptr;
+  RingAccountCredentialsPage* ringAccountCredentialsPage = nullptr;
+  FinishPage* finishPage = nullptr;
 
-  KPageWidgetItem * ringAccountCredentialsPageItem = nullptr;
-  KPageWidgetItem * progressPageItem = nullptr;
-  KPageWidgetItem * finishPageItem = nullptr;
+  KPageWidgetItem* ringAccountCredentialsPageItem = nullptr;
+  KPageWidgetItem* progressPageItem = nullptr;
+  KPageWidgetItem* finishPageItem = nullptr;
 
-  Account * account = nullptr;
+  Account* account = nullptr;
 };
 
 #endif // ACCOUNTASSISTANTDIALOG_H

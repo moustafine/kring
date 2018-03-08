@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -34,7 +34,7 @@ class AccountsSettingsPage : public QWidget
   Q_OBJECT
 
 public:
-  explicit AccountsSettingsPage(QWidget * parent = nullptr);
+  explicit AccountsSettingsPage(QWidget* parent = nullptr);
   ~AccountsSettingsPage();
 
 private slots:
@@ -42,13 +42,13 @@ private slots:
   void on_modifyPushButton_clicked();
   void on_deletePushButton_clicked();
 
-  void handleCurrentAccountIndexChange(const QModelIndex & currentProxyIndex,
-                                       const QModelIndex & previousProxyIndex);
+  void handleCurrentAccountIndexChange(const QModelIndex& currentProxyIndex,
+                                       const QModelIndex& previousProxyIndex);
 
 private:
-  Ui::AccountsSettingsPage * ui = nullptr;
+  Ui::AccountsSettingsPage* ui = nullptr;
 
-  QSortFilterProxyModel * sortFilterProxyModel = nullptr;
+  QSortFilterProxyModel* sortFilterProxyModel = nullptr;
 };
 
 #endif // ACCOUNTSSETTINGSPAGE_H

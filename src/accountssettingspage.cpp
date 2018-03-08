@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -49,7 +49,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Q_DECLARE_LOGGING_CATEGORY(kring)
 
-AccountsSettingsPage::AccountsSettingsPage(QWidget * parent)
+AccountsSettingsPage::AccountsSettingsPage(QWidget* parent)
   : QWidget(parent)
 {
   ui = new Ui::AccountsSettingsPage();
@@ -62,8 +62,8 @@ AccountsSettingsPage::AccountsSettingsPage(QWidget * parent)
   sortFilterProxyModel->setSourceModel(accountProxyModel);
 
   delete ui->accountTreeView->itemDelegate();
-  ui->accountTreeView
-      ->setItemDelegate(new AccountDelegate(ui->accountTreeView));
+  ui->accountTreeView->setItemDelegate(
+    new AccountDelegate(ui->accountTreeView));
   ui->accountTreeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
   ui->accountTreeView->setAlternatingRowColors(true);
   ui->accountTreeView->setRootIsDecorated(false);
@@ -71,8 +71,8 @@ AccountsSettingsPage::AccountsSettingsPage(QWidget * parent)
   ui->accountTreeView->setSortingEnabled(true);
   ui->accountTreeView->sortByColumn(0, Qt::AscendingOrder);
 
-  ui->accountTreeView->header()
-      ->setSectionResizeMode(QHeaderView::ResizeToContents);
+  ui->accountTreeView->header()->setSectionResizeMode(
+    QHeaderView::ResizeToContents);
 
   connect(ui->accountTreeView->selectionModel(),
           &QItemSelectionModel::currentChanged,
@@ -82,25 +82,24 @@ AccountsSettingsPage::AccountsSettingsPage(QWidget * parent)
   auto currentProxyIndex = ui->accountTreeView->currentIndex();
   handleCurrentAccountIndexChange(currentProxyIndex, currentProxyIndex);
 
-  connect(&AccountModel::instance(),
-          &AccountModel::accountStateChanged,
-          this,
-          [this](Account * account, const Account::RegistrationState state)
-  {
-    Q_UNUSED(state);
+  connect(
+    &AccountModel::instance(),
+    &AccountModel::accountStateChanged,
+    this,
+    [this](Account* account, const Account::RegistrationState state) {
+      Q_UNUSED(state);
 
-    auto currentProxyIndex = ui->accountTreeView->currentIndex();
-    auto currentSourceIndex
-        = sortFilterProxyModel->mapToSource(currentProxyIndex);
+      auto currentProxyIndex = ui->accountTreeView->currentIndex();
+      auto currentSourceIndex =
+        sortFilterProxyModel->mapToSource(currentProxyIndex);
 
-    if (account
-        == AccountModel::instance()
-        .getAccountByModelIndex(currentSourceIndex)) {
-      handleCurrentAccountIndexChange(currentProxyIndex, currentProxyIndex);
-    }
+      if (account ==
+          AccountModel::instance().getAccountByModelIndex(currentSourceIndex)) {
+        handleCurrentAccountIndexChange(currentProxyIndex, currentProxyIndex);
+      }
 
-    return;
-  });
+      return;
+    });
 }
 
 AccountsSettingsPage::~AccountsSettingsPage()
@@ -108,7 +107,8 @@ AccountsSettingsPage::~AccountsSettingsPage()
   delete ui;
 }
 
-void AccountsSettingsPage::on_addPushButton_clicked()
+void
+AccountsSettingsPage::on_addPushButton_clicked()
 {
   auto accountAssistantDialog = new AccountAssistantDialog();
   accountAssistantDialog->setAttribute(Qt::WA_DeleteOnClose);
@@ -117,13 +117,14 @@ void AccountsSettingsPage::on_addPushButton_clicked()
   return;
 }
 
-void AccountsSettingsPage::on_modifyPushButton_clicked()
+void
+AccountsSettingsPage::on_modifyPushButton_clicked()
 {
-  auto currentSourceIndex
-      = sortFilterProxyModel->mapToSource(ui->accountTreeView->currentIndex());
+  auto currentSourceIndex =
+    sortFilterProxyModel->mapToSource(ui->accountTreeView->currentIndex());
 
-  auto account
-      = AccountModel::instance().getAccountByModelIndex(currentSourceIndex);
+  auto account =
+    AccountModel::instance().getAccountByModelIndex(currentSourceIndex);
 
   if (!account) {
     qCWarning(kring, "Failed to get account.");
@@ -133,26 +134,22 @@ void AccountsSettingsPage::on_modifyPushButton_clicked()
   auto accountSettingsDialog = new KPageDialog(this);
   accountSettingsDialog->setModal(true);
   accountSettingsDialog->setFaceType(KPageDialog::Tabbed);
-  accountSettingsDialog->setStandardButtons(QDialogButtonBox::Ok
-                                            | QDialogButtonBox::Apply
-                                            | QDialogButtonBox::Cancel
-                                            | QDialogButtonBox::Reset);
+  accountSettingsDialog->setStandardButtons(
+    QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel |
+    QDialogButtonBox::Reset);
 
-  AbstractSettingsPage * accountGeneralSettingsPage = nullptr;
+  AbstractSettingsPage* accountGeneralSettingsPage = nullptr;
 
   switch (account->protocol()) {
-    case Account::Protocol::RING:
-    {
+    case Account::Protocol::RING: {
       accountSettingsDialog->setWindowTitle(i18n("Ring account settings"));
 
-      accountGeneralSettingsPage
-          = new RingAccountGeneralSettingsPage(*account,
-                                               accountSettingsDialog);
+      accountGeneralSettingsPage =
+        new RingAccountGeneralSettingsPage(*account, accountSettingsDialog);
 
       break;
     }
-    default:
-    {
+    default: {
       break;
     }
   }
@@ -167,9 +164,8 @@ void AccountsSettingsPage::on_modifyPushButton_clicked()
 
   accountSettingsDialog->addPage(accountGeneralSettingsPage, i18n("General"));
 
-  auto accountModifyingDialogManager
-      = new KConfigDialogManager(accountSettingsDialog,
-                                 new RingAccountSettings(*account));
+  auto accountModifyingDialogManager = new KConfigDialogManager(
+    accountSettingsDialog, new RingAccountSettings(*account));
   accountModifyingDialogManager->addWidget(accountGeneralSettingsPage);
 
   connect(accountSettingsDialog->button(QDialogButtonBox::Ok),
@@ -189,42 +185,34 @@ void AccountsSettingsPage::on_modifyPushButton_clicked()
           accountModifyingDialogManager,
           &KConfigDialogManager::updateWidgets);
 
-  auto validateAccountSettingsDialogHandler
-      = [accountSettingsDialog,
-      accountModifyingDialogManager,
-      accountGeneralSettingsPage]()
-  {
+  auto validateAccountSettingsDialogHandler = [accountSettingsDialog,
+                                               accountModifyingDialogManager,
+                                               accountGeneralSettingsPage]() {
     accountGeneralSettingsPage->validate();
 
     if (accountModifyingDialogManager->hasChanged()) {
       if (accountGeneralSettingsPage->isValid()) {
-        accountSettingsDialog->button(QDialogButtonBox::Ok)
-            ->setEnabled(true);
+        accountSettingsDialog->button(QDialogButtonBox::Ok)->setEnabled(true);
         accountSettingsDialog->button(QDialogButtonBox::Apply)
-            ->setEnabled(true);
+          ->setEnabled(true);
       } else {
-        accountSettingsDialog->button(QDialogButtonBox::Ok)
-            ->setEnabled(false);
+        accountSettingsDialog->button(QDialogButtonBox::Ok)->setEnabled(false);
         accountSettingsDialog->button(QDialogButtonBox::Apply)
-            ->setEnabled(false);
+          ->setEnabled(false);
       }
-      accountSettingsDialog->button(QDialogButtonBox::Reset)
-          ->setEnabled(true);
+      accountSettingsDialog->button(QDialogButtonBox::Reset)->setEnabled(true);
     } else {
-      accountSettingsDialog->button(QDialogButtonBox::Ok)
-          ->setEnabled(true);
-      accountSettingsDialog->button(QDialogButtonBox::Apply)
-          ->setEnabled(false);
-      accountSettingsDialog->button(QDialogButtonBox::Reset)
-          ->setEnabled(false);
+      accountSettingsDialog->button(QDialogButtonBox::Ok)->setEnabled(true);
+      accountSettingsDialog->button(QDialogButtonBox::Apply)->setEnabled(false);
+      accountSettingsDialog->button(QDialogButtonBox::Reset)->setEnabled(false);
     }
 
     return;
   };
 
   connect(accountModifyingDialogManager,
-          static_cast<void (KConfigDialogManager::*)()>(&KConfigDialogManager
-                                                        ::settingsChanged),
+          static_cast<void (KConfigDialogManager::*)()>(
+            &KConfigDialogManager ::settingsChanged),
           validateAccountSettingsDialogHandler);
   connect(accountModifyingDialogManager,
           &KConfigDialogManager::widgetModified,
@@ -234,13 +222,12 @@ void AccountsSettingsPage::on_modifyPushButton_clicked()
   connect(&AccountModel::instance(),
           &AccountModel::accountRemoved,
           accountSettingsDialog,
-          [account, accountSettingsDialog](Account * removedAccount)
-  {
-    if (account == removedAccount) {
-      accountSettingsDialog->close();
-    }
-    return;
-  });
+          [account, accountSettingsDialog](Account* removedAccount) {
+            if (account == removedAccount) {
+              accountSettingsDialog->close();
+            }
+            return;
+          });
 
   accountSettingsDialog->setAttribute(Qt::WA_DeleteOnClose);
   accountSettingsDialog->show();
@@ -248,13 +235,14 @@ void AccountsSettingsPage::on_modifyPushButton_clicked()
   return;
 }
 
-void AccountsSettingsPage::on_deletePushButton_clicked()
+void
+AccountsSettingsPage::on_deletePushButton_clicked()
 {
-  auto currentSourceIndex
-      = sortFilterProxyModel->mapToSource(ui->accountTreeView->currentIndex());
+  auto currentSourceIndex =
+    sortFilterProxyModel->mapToSource(ui->accountTreeView->currentIndex());
 
-  auto account
-      = AccountModel::instance().getAccountByModelIndex(currentSourceIndex);
+  auto account =
+    AccountModel::instance().getAccountByModelIndex(currentSourceIndex);
 
   if (!account) {
     qCWarning(kring, "Failed to get account.");
@@ -263,14 +251,14 @@ void AccountsSettingsPage::on_deletePushButton_clicked()
 
   auto accountId = account->id();
 
-  auto buttonCode
-      = KMessageBox::warningContinueCancel(this,
-                                           i18n("Do you want to delete"
-                                                " account \"%1\"?",
-                                                account->alias()),
-                                           i18n("Account deletion"),
-                                           KStandardGuiItem::del(),
-                                           KStandardGuiItem::cancel());
+  auto buttonCode =
+    KMessageBox::warningContinueCancel(this,
+                                       i18n("Do you want to delete"
+                                            " account \"%1\"?",
+                                            account->alias()),
+                                       i18n("Account deletion"),
+                                       KStandardGuiItem::del(),
+                                       KStandardGuiItem::cancel());
 
   account = AccountModel::instance().getById(accountId);
 
@@ -284,28 +272,28 @@ void AccountsSettingsPage::on_deletePushButton_clicked()
   return;
 }
 
-void AccountsSettingsPage::handleCurrentAccountIndexChange
-(const QModelIndex & currentProxyIndex, const QModelIndex & previousProxyIndex)
+void
+AccountsSettingsPage::handleCurrentAccountIndexChange(
+  const QModelIndex& currentProxyIndex,
+  const QModelIndex& previousProxyIndex)
 {
   Q_UNUSED(previousProxyIndex);
 
-  auto currentSourceIndex
-      = sortFilterProxyModel->mapToSource(currentProxyIndex);
+  auto currentSourceIndex =
+    sortFilterProxyModel->mapToSource(currentProxyIndex);
 
-  auto account
-      = AccountModel::instance().getAccountByModelIndex(currentSourceIndex);
+  auto account =
+    AccountModel::instance().getAccountByModelIndex(currentSourceIndex);
 
   if (account) {
     switch (account->registrationState()) {
       case Account::RegistrationState::INITIALIZING:
-      case Account::RegistrationState::COUNT__:
-      {
+      case Account::RegistrationState::COUNT__: {
         ui->modifyPushButton->setEnabled(false);
         ui->deletePushButton->setEnabled(false);
         break;
       }
-      default:
-      {
+      default: {
         ui->modifyPushButton->setEnabled(true);
         ui->deletePushButton->setEnabled(true);
         break;

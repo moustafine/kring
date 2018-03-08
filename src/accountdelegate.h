@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -28,14 +28,14 @@ class AccountDelegate : public QStyledItemDelegate
   Q_OBJECT
 
 public:
-  explicit AccountDelegate(QObject * parent = nullptr);
+  explicit AccountDelegate(QObject* parent = nullptr);
   ~AccountDelegate();
 
 protected:
-  bool editorEvent(QEvent * event,
-                   QAbstractItemModel * model,
-                   const QStyleOptionViewItem & option,
-                   const QModelIndex & index) override;
+  bool editorEvent(QEvent* event,
+                   QAbstractItemModel* model,
+                   const QStyleOptionViewItem& option,
+                   const QModelIndex& index) override;
 };
 
 #endif // ACCOUNTDELEGATE_H

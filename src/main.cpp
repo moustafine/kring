@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -33,7 +33,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Q_LOGGING_CATEGORY(kring, "kring")
 
-int main(int argc, char ** argv)
+int
+main(int argc, char** argv)
 {
   KringApplication application(argc, argv);
 
@@ -43,7 +44,7 @@ int main(int argc, char ** argv)
                        QStringLiteral("0.1"),
                        i18n("A client for Ring"),
                        KAboutLicense::GPL,
-                       i18n("(c) 2017, Marat Moustafine"));
+                       i18n("(c) 2017-2018, Marat Moustafine"));
 
   aboutData.addAuthor(i18n("Marat Moustafine"),
                       i18n("Author"),

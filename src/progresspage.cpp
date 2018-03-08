@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "ui_progresspage.h"
 
-ProgressPage::ProgressPage(QWidget * parent)
+ProgressPage::ProgressPage(QWidget* parent)
   : QWidget(parent)
 {
   ui = new Ui::ProgressPage();

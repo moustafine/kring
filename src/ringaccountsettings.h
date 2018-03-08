@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -30,7 +30,7 @@ class RingAccountSettings : public AccountSettings
   Q_OBJECT
 
 public:
-  explicit RingAccountSettings(Account & account, QObject * parent = nullptr);
+  explicit RingAccountSettings(Account& account, QObject* parent = nullptr);
   ~RingAccountSettings();
 
 private:

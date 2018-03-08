@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -32,11 +32,11 @@ class GeneralSettingsPage : public QWidget
   Q_OBJECT
 
 public:
-  explicit GeneralSettingsPage(QWidget * parent = nullptr);
+  explicit GeneralSettingsPage(QWidget* parent = nullptr);
   ~GeneralSettingsPage();
 
 private:
-  Ui::GeneralSettingsPage * ui = nullptr;
+  Ui::GeneralSettingsPage* ui = nullptr;
 };
 
 #endif // GENERALSETTINGSPAGE_H

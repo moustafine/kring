@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -32,7 +32,7 @@ class KringWidget : public QWidget
   Q_OBJECT
 
 public:
-  explicit KringWidget(QWidget * parent = nullptr);
+  explicit KringWidget(QWidget* parent = nullptr);
   ~KringWidget();
 
 public slots:
@@ -43,15 +43,15 @@ signals:
   /**
    * Use this signal to change the content of the statusbar
    */
-  void signalChangeStatusbar(const QString & text);
+  void signalChangeStatusbar(const QString& text);
 
   /**
    * Use this signal to change the content of the caption
    */
-  void signalChangeCaption(const QString & text);
+  void signalChangeCaption(const QString& text);
 
 private:
-  Ui::KringWidget * ui = nullptr;
+  Ui::KringWidget* ui = nullptr;
 };
 
 #endif // KRINGWIDGET_H

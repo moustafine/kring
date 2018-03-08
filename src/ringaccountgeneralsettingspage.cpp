@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -47,8 +47,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Q_DECLARE_LOGGING_CATEGORY(kring)
 
-RingAccountGeneralSettingsPage::RingAccountGeneralSettingsPage
-(Account & account, QWidget * parent)
+RingAccountGeneralSettingsPage::RingAccountGeneralSettingsPage(Account& account,
+                                                               QWidget* parent)
   : AbstractSettingsPage(parent)
 {
   ui = new Ui::RingAccountGeneralSettingsPage();
@@ -59,17 +59,17 @@ RingAccountGeneralSettingsPage::RingAccountGeneralSettingsPage
   ui->idLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
   ui->idLabel->setText(account.username());
 
-  QRegularExpression userNameRegularExpression
-      (QStringLiteral("[A-Za-z0-9]+(-?[A-Za-z0-9]+)*"));
-  auto userNameValidator
-      = new QRegularExpressionValidator(userNameRegularExpression, this);
+  QRegularExpression userNameRegularExpression(
+    QStringLiteral("[A-Za-z0-9]+(-?[A-Za-z0-9]+)*"));
+  auto userNameValidator =
+    new QRegularExpressionValidator(userNameRegularExpression, this);
   ui->kcfg_userName->setValidator(userNameValidator);
 
   auto publicUserName = account.registeredName();
 
   auto publicUserNameGroupBox = new QGroupBox(i18n("Public user name"), this);
-  publicUserNameGroupBox
-      ->setObjectName(QStringLiteral("publicUserNameGroupBox"));
+  publicUserNameGroupBox->setObjectName(
+    QStringLiteral("publicUserNameGroupBox"));
 
   if (publicUserName.isEmpty()) {
     publicUserNameLayout = new QVBoxLayout(publicUserNameGroupBox);
@@ -77,16 +77,16 @@ RingAccountGeneralSettingsPage::RingAccountGeneralSettingsPage
     auto registerPublicUserNameLayout = new QHBoxLayout();
 
     publicUserNameLineEdit = new QLineEdit(account.alias());
-    publicUserNameLineEdit
-        ->setObjectName(QStringLiteral("publicUserNameLineEdit"));
+    publicUserNameLineEdit->setObjectName(
+      QStringLiteral("publicUserNameLineEdit"));
     publicUserNameLineEdit->setClearButtonEnabled(true);
     publicUserNameLineEdit->setValidator(userNameValidator);
 
     registerPublicUserNameLayout->addWidget(publicUserNameLineEdit);
 
-    registerPublicUserNamePushButton
-        = new QPushButton(QIcon::fromTheme(QStringLiteral("object-locked")),
-                          i18n("Register (experimental)"));
+    registerPublicUserNamePushButton =
+      new QPushButton(QIcon::fromTheme(QStringLiteral("object-locked")),
+                      i18n("Register (experimental)"));
 
     registerPublicUserNameLayout->addWidget(registerPublicUserNamePushButton);
 
@@ -111,65 +111,64 @@ RingAccountGeneralSettingsPage::RingAccountGeneralSettingsPage
             &RingAccountGeneralSettingsPage::findPublicUserName);
     findPublicUserName(publicUserNameLineEdit->text());
 
-    connect(&account,
-            &Account::nameRegistrationEnded,
-            this,
-            &RingAccountGeneralSettingsPage
-            ::handlePublicUserNameRegistrationEnd);
+    connect(
+      &account,
+      &Account::nameRegistrationEnded,
+      this,
+      &RingAccountGeneralSettingsPage ::handlePublicUserNameRegistrationEnd);
     connect(registerPublicUserNamePushButton,
             &QAbstractButton::clicked,
             this,
-            [this, &account]()
-    {
-      AuthenticationDialog authenticationDialog(this);
+            [this, &account]() {
+              AuthenticationDialog authenticationDialog(this);
 
-      if (publicUserNameLineEdit && !authenticationDialog.exec()) {
-        return;
-      }
+              if (publicUserNameLineEdit && !authenticationDialog.exec()) {
+                return;
+              }
 
-      auto publicUserNameRegistrationStarted
-          = account.registerName(authenticationDialog.getPassword(),
-                                 publicUserNameLineEdit->text());
+              auto publicUserNameRegistrationStarted =
+                account.registerName(authenticationDialog.getPassword(),
+                                     publicUserNameLineEdit->text());
 
-      if (publicUserNameRegistrationStarted) {
-        if (publicUserNameLineEdit) {
-          publicUserNameLineEdit->hide();
-        }
-        if (registerPublicUserNamePushButton) {
-          registerPublicUserNamePushButton->hide();
-        }
+              if (publicUserNameRegistrationStarted) {
+                if (publicUserNameLineEdit) {
+                  publicUserNameLineEdit->hide();
+                }
+                if (registerPublicUserNamePushButton) {
+                  registerPublicUserNamePushButton->hide();
+                }
 
-        if (registeringPublicUserNameProgressBar) {
-          registeringPublicUserNameProgressBar->show();
-        } else {
-          registeringPublicUserNameProgressBar = new QProgressBar();
-          registeringPublicUserNameProgressBar->setMinimum(0);
-          registeringPublicUserNameProgressBar->setMaximum(0);
+                if (registeringPublicUserNameProgressBar) {
+                  registeringPublicUserNameProgressBar->show();
+                } else {
+                  registeringPublicUserNameProgressBar = new QProgressBar();
+                  registeringPublicUserNameProgressBar->setMinimum(0);
+                  registeringPublicUserNameProgressBar->setMaximum(0);
 
-          publicUserNameLayout
-              ->insertWidget(0, registeringPublicUserNameProgressBar);
-        }
+                  publicUserNameLayout->insertWidget(
+                    0, registeringPublicUserNameProgressBar);
+                }
 
-        if (publicUserNameStateLabel) {
-          publicUserNameStateLabel->setText(i18n("Registering..."));
-        }
-      } else {
-        if (errorMessageWidget) {
-          errorMessageWidget->animatedShow();
-        } else {
-          errorMessageWidget
-              = new KMessageWidget(i18n("Could not start"
-                                        " public user name"
-                                        " registration process."));
-          errorMessageWidget->setWordWrap(true);
-          errorMessageWidget->setMessageType(KMessageWidget::Error);
+                if (publicUserNameStateLabel) {
+                  publicUserNameStateLabel->setText(i18n("Registering..."));
+                }
+              } else {
+                if (errorMessageWidget) {
+                  errorMessageWidget->animatedShow();
+                } else {
+                  errorMessageWidget =
+                    new KMessageWidget(i18n("Could not start"
+                                            " public user name"
+                                            " registration process."));
+                  errorMessageWidget->setWordWrap(true);
+                  errorMessageWidget->setMessageType(KMessageWidget::Error);
 
-          ui->vboxLayout->insertWidget(0, errorMessageWidget);
-        }
-      }
+                  ui->vboxLayout->insertWidget(0, errorMessageWidget);
+                }
+              }
 
-      return;
-    });
+              return;
+            });
   } else {
     setRegisteredPublicUserNameLabel(publicUserName);
   }
@@ -183,23 +182,26 @@ RingAccountGeneralSettingsPage::~RingAccountGeneralSettingsPage()
   delete ui;
 }
 
-bool RingAccountGeneralSettingsPage::isValid() const
+bool
+RingAccountGeneralSettingsPage::isValid() const
 {
   return userNameValid;
 }
 
-void RingAccountGeneralSettingsPage::validate()
+void
+RingAccountGeneralSettingsPage::validate()
 {
   validateUserName();
 
   return;
 }
 
-void RingAccountGeneralSettingsPage::updateUi()
+void
+RingAccountGeneralSettingsPage::updateUi()
 {
   KColorScheme colorScheme(QPalette::Active);
-  auto warningColorName = colorScheme
-      .background(KColorScheme::NegativeBackground)
+  auto warningColorName =
+    colorScheme.background(KColorScheme::NegativeBackground)
       .color()
       .name(QColor::HexRgb);
 
@@ -207,20 +209,18 @@ void RingAccountGeneralSettingsPage::updateUi()
     setStyleSheet(QStringLiteral());
   } else {
     setStyleSheet(QStringLiteral("QLineEdit#kcfg_userName {"
-                                 "background:")
-                  + warningColorName
-                  + QStringLiteral("}"));
+                                 "background:") +
+                  warningColorName + QStringLiteral("}"));
   }
 
   if (publicUserNameLineEdit && registerPublicUserNamePushButton) {
     if (publicUserNameValid) {
       registerPublicUserNamePushButton->setEnabled(true);
     } else {
-      setStyleSheet(styleSheet()
-                    + QStringLiteral("QLineEdit#publicUserNameLineEdit {"
-                                     "background:")
-                    + warningColorName
-                    + QStringLiteral("}"));
+      setStyleSheet(styleSheet() +
+                    QStringLiteral("QLineEdit#publicUserNameLineEdit {"
+                                   "background:") +
+                    warningColorName + QStringLiteral("}"));
 
       registerPublicUserNamePushButton->setEnabled(false);
     }
@@ -229,7 +229,8 @@ void RingAccountGeneralSettingsPage::updateUi()
   return;
 }
 
-void RingAccountGeneralSettingsPage::validateUserName()
+void
+RingAccountGeneralSettingsPage::validateUserName()
 {
   userNameValid = true;
 
@@ -242,20 +243,20 @@ void RingAccountGeneralSettingsPage::validateUserName()
   return;
 }
 
-void RingAccountGeneralSettingsPage::setRegisteredPublicUserNameLabel
-(const QString & name)
+void
+RingAccountGeneralSettingsPage::setRegisteredPublicUserNameLabel(
+  const QString& name)
 {
   if (publicUserNameLayout) {
     delete publicUserNameLayout;
     publicUserNameLayout = nullptr;
   }
 
-  const auto publicUserNameGroupBoxName
-      = QStringLiteral("publicUserNameGroupBox");
+  const auto publicUserNameGroupBoxName =
+    QStringLiteral("publicUserNameGroupBox");
 
-  auto publicUserNameGroupBox
-      = findChild<QGroupBox *>(publicUserNameGroupBoxName,
-                               Qt::FindDirectChildrenOnly);
+  auto publicUserNameGroupBox = findChild<QGroupBox*>(
+    publicUserNameGroupBoxName, Qt::FindDirectChildrenOnly);
 
   if (!publicUserNameGroupBox) {
     qCWarning(kring,
@@ -267,8 +268,8 @@ void RingAccountGeneralSettingsPage::setRegisteredPublicUserNameLabel
   publicUserNameLayout = new QVBoxLayout(publicUserNameGroupBox);
 
   auto publicUserNameLabel = new QLabel(QStringLiteral("ring:") + name);
-  publicUserNameLabel
-      ->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+  publicUserNameLabel->setFont(
+    QFontDatabase::systemFont(QFontDatabase::FixedFont));
   publicUserNameLabel->setAlignment(Qt::AlignCenter);
   publicUserNameLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
 
@@ -277,8 +278,9 @@ void RingAccountGeneralSettingsPage::setRegisteredPublicUserNameLabel
   return;
 }
 
-void RingAccountGeneralSettingsPage::setWarningMessage
-(const NameDirectory::RegisterNameStatus status)
+void
+RingAccountGeneralSettingsPage::setWarningMessage(
+  const NameDirectory::RegisterNameStatus status)
 {
   if (!warningMessageWidget) {
     return;
@@ -288,39 +290,29 @@ void RingAccountGeneralSettingsPage::setWarningMessage
   const auto space = QStringLiteral(" ");
 
   switch (status) {
-    case NameDirectory::RegisterNameStatus::WRONG_PASSWORD:
-    {
-      warningMessageWidget->setText(messagePart
-                                    + space
-                                    + i18n("Password is wrong."));
+    case NameDirectory::RegisterNameStatus::WRONG_PASSWORD: {
+      warningMessageWidget->setText(messagePart + space +
+                                    i18n("Password is wrong."));
       break;
     }
-    case NameDirectory::RegisterNameStatus::INVALID_NAME:
-    {
-      warningMessageWidget->setText(messagePart
-                                    + space
-                                    + i18n("User name is invalid."));
+    case NameDirectory::RegisterNameStatus::INVALID_NAME: {
+      warningMessageWidget->setText(messagePart + space +
+                                    i18n("User name is invalid."));
       break;
     }
-    case NameDirectory::RegisterNameStatus::ALREADY_TAKEN:
-    {
-      warningMessageWidget->setText(messagePart
-                                    + space
-                                    + i18n("User name is already taken."));
+    case NameDirectory::RegisterNameStatus::ALREADY_TAKEN: {
+      warningMessageWidget->setText(messagePart + space +
+                                    i18n("User name is already taken."));
       break;
     }
-    case NameDirectory::RegisterNameStatus::NETWORK_ERROR:
-    {
-      warningMessageWidget->setText(messagePart
-                                    + space
-                                    + i18n("Network error has occurred."));
+    case NameDirectory::RegisterNameStatus::NETWORK_ERROR: {
+      warningMessageWidget->setText(messagePart + space +
+                                    i18n("Network error has occurred."));
       break;
     }
-    default:
-    {
-      warningMessageWidget->setText(messagePart
-                                    + space
-                                    + i18n("Unknown error has occurred."));
+    default: {
+      warningMessageWidget->setText(messagePart + space +
+                                    i18n("Unknown error has occurred."));
       break;
     }
   }
@@ -328,7 +320,8 @@ void RingAccountGeneralSettingsPage::setWarningMessage
   return;
 }
 
-void RingAccountGeneralSettingsPage::findPublicUserName(const QString & name)
+void
+RingAccountGeneralSettingsPage::findPublicUserName(const QString& name)
 {
   publicUserNameValid = false;
 
@@ -349,18 +342,17 @@ void RingAccountGeneralSettingsPage::findPublicUserName(const QString & name)
     publicUserNameStateLabel->setText(i18n("Searching..."));
   }
 
-  NameDirectory::instance().lookupName(nullptr,
-                                       QStringLiteral(),
-                                       name);
+  NameDirectory::instance().lookupName(nullptr, QStringLiteral(), name);
 
   return;
 }
 
-void RingAccountGeneralSettingsPage::validatePublicUserName
-(const Account * account,
- NameDirectory::LookupStatus status,
- const QString & address,
- const QString & name)
+void
+RingAccountGeneralSettingsPage::validatePublicUserName(
+  const Account* account,
+  NameDirectory::LookupStatus status,
+  const QString& address,
+  const QString& name)
 {
   Q_UNUSED(account)
   Q_UNUSED(address)
@@ -372,29 +364,24 @@ void RingAccountGeneralSettingsPage::validatePublicUserName
   publicUserNameValid = false;
 
   switch (status) {
-    case NameDirectory::LookupStatus::NOT_FOUND:
-    {
+    case NameDirectory::LookupStatus::NOT_FOUND: {
       publicUserNameValid = true;
       publicUserNameStateLabel->setText(i18n("Name is available"));
       break;
     }
-    case NameDirectory::LookupStatus::SUCCESS:
-    {
+    case NameDirectory::LookupStatus::SUCCESS: {
       publicUserNameStateLabel->setText(i18n("Name is not available"));
       break;
     }
-    case NameDirectory::LookupStatus::INVALID_NAME:
-    {
+    case NameDirectory::LookupStatus::INVALID_NAME: {
       publicUserNameStateLabel->setText(i18n("Name is invalid"));
       break;
     }
-    case NameDirectory::LookupStatus::ERROR:
-    {
+    case NameDirectory::LookupStatus::ERROR: {
       publicUserNameStateLabel->setText(i18n("Network error"));
       break;
     }
-    default:
-    {
+    default: {
       break;
     }
   }
@@ -404,8 +391,10 @@ void RingAccountGeneralSettingsPage::validatePublicUserName
   return;
 }
 
-void RingAccountGeneralSettingsPage::handlePublicUserNameRegistrationEnd
-(NameDirectory::RegisterNameStatus status, const QString & name)
+void
+RingAccountGeneralSettingsPage::handlePublicUserNameRegistrationEnd(
+  NameDirectory::RegisterNameStatus status,
+  const QString& name)
 {
   if (status == NameDirectory::RegisterNameStatus::SUCCESS) {
     if (publicUserNameLineEdit) {

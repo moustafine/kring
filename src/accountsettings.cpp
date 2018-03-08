@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <account.h>
 
-AccountSettings::AccountSettings(QObject * parent)
+AccountSettings::AccountSettings(QObject* parent)
   : KCoreConfigSkeleton(QString(), parent)
 {
   ;
@@ -33,17 +33,17 @@ AccountSettings::~AccountSettings()
   ;
 }
 
-AccountSettings::StringSettingItem::StringSettingItem
-(Account & account,
- Setting setting,
- const QString & group,
- const QString & key,
- QString & reference,
- const QString & defaultValue,
- KCoreConfigSkeleton::ItemString::Type type)
-  : ItemString(group, key, reference, defaultValue, type),
-    account(account),
-    setting(setting)
+AccountSettings::StringSettingItem::StringSettingItem(
+  Account& account,
+  Setting setting,
+  const QString& group,
+  const QString& key,
+  QString& reference,
+  const QString& defaultValue,
+  KCoreConfigSkeleton::ItemString::Type type)
+  : ItemString(group, key, reference, defaultValue, type)
+  , account(account)
+  , setting(setting)
 {
   ;
 }
@@ -53,21 +53,19 @@ AccountSettings::StringSettingItem::~StringSettingItem()
   ;
 }
 
-void AccountSettings::StringSettingItem::readConfig(KConfig * config)
+void
+AccountSettings::StringSettingItem::readConfig(KConfig* config)
 {
   switch (setting) {
-    case Setting::UserName:
-    {
+    case Setting::UserName: {
       mReference = account.alias();
       break;
     }
-    case Setting::FullName:
-    {
+    case Setting::FullName: {
       mReference = account.displayName();
       break;
     }
-    default:
-    {
+    default: {
       break;
     }
   }
@@ -76,28 +74,26 @@ void AccountSettings::StringSettingItem::readConfig(KConfig * config)
 
   if (config) {
     readImmutability(KConfigGroup(config, mGroup));
- }
+  }
 
   return;
 }
 
-void AccountSettings::StringSettingItem::writeConfig(KConfig * config)
+void
+AccountSettings::StringSettingItem::writeConfig(KConfig* config)
 {
   Q_UNUSED(config);
 
   switch (setting) {
-    case Setting::UserName:
-    {
+    case Setting::UserName: {
       account.setAlias(mReference);
       break;
     }
-    case Setting::FullName:
-    {
+    case Setting::FullName: {
       account.setDisplayName(mReference);
       break;
     }
-    default:
-    {
+    default: {
       break;
     }
   }
@@ -107,15 +103,15 @@ void AccountSettings::StringSettingItem::writeConfig(KConfig * config)
   return;
 }
 
-AccountSettings::BoolSettingItem::BoolSettingItem(Account & account,
+AccountSettings::BoolSettingItem::BoolSettingItem(Account& account,
                                                   Setting setting,
-                                                  const QString & group,
-                                                  const QString & key,
-                                                  bool & reference,
+                                                  const QString& group,
+                                                  const QString& key,
+                                                  bool& reference,
                                                   bool defaultValue)
-  : ItemBool(group, key, reference, defaultValue),
-    account(account),
-    setting(setting)
+  : ItemBool(group, key, reference, defaultValue)
+  , account(account)
+  , setting(setting)
 {
   ;
 }
@@ -125,16 +121,15 @@ AccountSettings::BoolSettingItem::~BoolSettingItem()
   ;
 }
 
-void AccountSettings::BoolSettingItem::readConfig(KConfig * config)
+void
+AccountSettings::BoolSettingItem::readConfig(KConfig* config)
 {
   switch (setting) {
-    case Setting::AccountEnabled:
-    {
+    case Setting::AccountEnabled: {
       mReference = account.isEnabled();
       break;
     }
-    default:
-    {
+    default: {
       break;
     }
   }
@@ -143,23 +138,22 @@ void AccountSettings::BoolSettingItem::readConfig(KConfig * config)
 
   if (config) {
     readImmutability(KConfigGroup(config, mGroup));
- }
+  }
 
   return;
 }
 
-void AccountSettings::BoolSettingItem::writeConfig(KConfig * config)
+void
+AccountSettings::BoolSettingItem::writeConfig(KConfig* config)
 {
   Q_UNUSED(config);
 
   switch (setting) {
-    case Setting::AccountEnabled:
-    {
+    case Setting::AccountEnabled: {
       account.setEnabled(mReference);
       break;
     }
-    default:
-    {
+    default: {
       break;
     }
   }

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <account.h>
 #include <accountmodel.h>
 
-AccountDelegate::AccountDelegate(QObject * parent)
+AccountDelegate::AccountDelegate(QObject* parent)
   : QStyledItemDelegate(parent)
 {
   ;
@@ -36,27 +36,26 @@ AccountDelegate::~AccountDelegate()
   ;
 }
 
-bool AccountDelegate::editorEvent(QEvent * event,
-                                  QAbstractItemModel * model,
-                                  const QStyleOptionViewItem & option,
-                                  const QModelIndex & index)
+bool
+AccountDelegate::editorEvent(QEvent* event,
+                             QAbstractItemModel* model,
+                             const QStyleOptionViewItem& option,
+                             const QModelIndex& index)
 {
-  auto eventHandled = QStyledItemDelegate::editorEvent(event,
-                                                       model,
-                                                       option,
-                                                       index);
+  auto eventHandled =
+    QStyledItemDelegate::editorEvent(event, model, option, index);
 
   if (eventHandled) {
-    AccountModel * accountModel = nullptr;
+    AccountModel* accountModel = nullptr;
     QModelIndex sourceIndex(index);
 
     while (!accountModel || model) {
-      auto proxyModel = qobject_cast<QAbstractProxyModel *>(model);
+      auto proxyModel = qobject_cast<QAbstractProxyModel*>(model);
       if (proxyModel) {
         model = proxyModel->sourceModel();
         sourceIndex = proxyModel->mapToSource(sourceIndex);
       } else {
-        accountModel = qobject_cast<AccountModel *>(model);
+        accountModel = qobject_cast<AccountModel*>(model);
         model = nullptr;
       }
     }
@@ -64,8 +63,8 @@ bool AccountDelegate::editorEvent(QEvent * event,
     if (accountModel) {
       auto account = accountModel->getAccountByModelIndex(sourceIndex);
       if (account) {
-        if (!((account->editState() == Account::EditState::MODIFIED_COMPLETE)
-              && account->performAction(Account::EditAction::SAVE))) {
+        if (!((account->editState() == Account::EditState::MODIFIED_COMPLETE) &&
+              account->performAction(Account::EditAction::SAVE))) {
           account->performAction(Account::EditAction::CANCEL);
         }
       }

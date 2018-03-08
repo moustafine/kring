@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -44,8 +44,8 @@ class RingAccountGeneralSettingsPage : public AbstractSettingsPage
   Q_OBJECT
 
 public:
-  explicit RingAccountGeneralSettingsPage(Account & account,
-                                          QWidget * parent = nullptr);
+  explicit RingAccountGeneralSettingsPage(Account& account,
+                                          QWidget* parent = nullptr);
   ~RingAccountGeneralSettingsPage();
 
 public:
@@ -57,30 +57,31 @@ private:
 
   void validateUserName();
 
-  void setRegisteredPublicUserNameLabel(const QString & name);
+  void setRegisteredPublicUserNameLabel(const QString& name);
   void setWarningMessage(const NameDirectory::RegisterNameStatus status);
 
 private slots:
-  void findPublicUserName(const QString & name);
-  void validatePublicUserName(const Account * account,
+  void findPublicUserName(const QString& name);
+  void validatePublicUserName(const Account* account,
                               NameDirectory::LookupStatus status,
-                              const QString & address,
-                              const QString & name);
-  void handlePublicUserNameRegistrationEnd
-  (NameDirectory::RegisterNameStatus status, const QString & name);
+                              const QString& address,
+                              const QString& name);
+  void handlePublicUserNameRegistrationEnd(
+    NameDirectory::RegisterNameStatus status,
+    const QString& name);
 
 private:
-  Ui::RingAccountGeneralSettingsPage * ui = nullptr;
+  Ui::RingAccountGeneralSettingsPage* ui = nullptr;
 
-  QVBoxLayout * publicUserNameLayout = nullptr;
+  QVBoxLayout* publicUserNameLayout = nullptr;
 
-  QLineEdit * publicUserNameLineEdit = nullptr;
-  QPushButton * registerPublicUserNamePushButton = nullptr;
-  QProgressBar * registeringPublicUserNameProgressBar = nullptr;
-  QLabel * publicUserNameStateLabel = nullptr;
+  QLineEdit* publicUserNameLineEdit = nullptr;
+  QPushButton* registerPublicUserNamePushButton = nullptr;
+  QProgressBar* registeringPublicUserNameProgressBar = nullptr;
+  QLabel* publicUserNameStateLabel = nullptr;
 
-  KMessageWidget * warningMessageWidget = nullptr;
-  KMessageWidget * errorMessageWidget = nullptr;
+  KMessageWidget* warningMessageWidget = nullptr;
+  KMessageWidget* errorMessageWidget = nullptr;
 
   bool userNameValid = false;
   bool publicUserNameValid = false;

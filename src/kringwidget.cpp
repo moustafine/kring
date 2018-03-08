@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "kringsettings.h"
 
-KringWidget::KringWidget(QWidget * parent)
+KringWidget::KringWidget(QWidget* parent)
   : QWidget(parent)
 {
   ui = new Ui::KringWidget();
@@ -36,7 +36,8 @@ KringWidget::~KringWidget()
   delete ui;
 }
 
-void KringWidget::slotSwitchColors()
+void
+KringWidget::slotSwitchColors()
 {
   // switch the foreground/background colors of the label
   QColor color = KringSettings::color_background();
@@ -48,7 +49,8 @@ void KringWidget::slotSwitchColors()
   return;
 }
 
-void KringWidget::loadSettings()
+void
+KringWidget::loadSettings()
 {
   QPalette palette;
   palette.setColor(QPalette::Window, KringSettings::color_background());
@@ -56,8 +58,8 @@ void KringWidget::loadSettings()
   ui->templateLabel->setPalette(palette);
 
   // i18n : internationalization
-  ui->templateLabel->setText(i18n("This project is %1 days old",
-                                  KringSettings::val_time()));
+  ui->templateLabel->setText(
+    i18n("This project is %1 days old", KringSettings::val_time()));
   emit signalChangeStatusbar(i18n("Settings changed"));
 
   return;

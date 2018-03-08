@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -20,37 +20,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "ringaccountsettings.h"
 
-RingAccountSettings::RingAccountSettings(Account & account, QObject * parent)
+RingAccountSettings::RingAccountSettings(Account& account, QObject* parent)
   : AccountSettings(parent)
 {
   const auto accountEnabledKey = QStringLiteral("accountEnabled");
-  auto accountEnabledItem
-      = new AccountSettings::BoolSettingItem
-      (account,
-       AccountSettings::BoolSettingItem::Setting::AccountEnabled,
-       currentGroup(),
-       accountEnabledKey,
-       accountEnabled);
+  auto accountEnabledItem = new AccountSettings::BoolSettingItem(
+    account,
+    AccountSettings::BoolSettingItem::Setting::AccountEnabled,
+    currentGroup(),
+    accountEnabledKey,
+    accountEnabled);
   addItem(accountEnabledItem, accountEnabledKey);
 
   const auto userNameKey = QStringLiteral("userName");
-  auto userNameItem
-      = new AccountSettings::StringSettingItem
-      (account,
-       AccountSettings::StringSettingItem::Setting::UserName,
-       currentGroup(),
-       userNameKey,
-       userName);
+  auto userNameItem = new AccountSettings::StringSettingItem(
+    account,
+    AccountSettings::StringSettingItem::Setting::UserName,
+    currentGroup(),
+    userNameKey,
+    userName);
   addItem(userNameItem, userNameKey);
 
   const auto fullNameKey = QStringLiteral("fullName");
-  auto fullNameItem
-      = new AccountSettings::StringSettingItem
-      (account,
-       AccountSettings::StringSettingItem::Setting::FullName,
-       currentGroup(),
-       fullNameKey,
-       fullName);
+  auto fullNameItem = new AccountSettings::StringSettingItem(
+    account,
+    AccountSettings::StringSettingItem::Setting::FullName,
+    currentGroup(),
+    fullNameKey,
+    fullName);
   addItem(fullNameItem, fullNameKey);
 }
 

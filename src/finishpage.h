@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -34,24 +34,25 @@ class FinishPage : public QWidget
   Q_OBJECT
 
 public:
-  explicit FinishPage(QWidget * parent = nullptr);
+  explicit FinishPage(QWidget* parent = nullptr);
   ~FinishPage();
 
 public:
-  void addWidget(QWidget * widget,
+  void addWidget(QWidget* widget,
                  int stretch = 0,
                  Qt::Alignment alignment = Qt::Alignment());
-  void addItem(QLayoutItem * layoutItem);
+  void addItem(QLayoutItem* layoutItem);
 
   void insertWidget(int index,
-                    QWidget * widget,
+                    QWidget* widget,
                     int stretch = 0,
                     Qt::Alignment alignment = Qt::Alignment());
-  void insertItem(int index, QLayoutItem * layoutItem);
+  void insertItem(int index, QLayoutItem* layoutItem);
 
   int getItemCount() const;
+
 private:
-  Ui::FinishPage * ui = nullptr;
+  Ui::FinishPage* ui = nullptr;
 };
 
 #endif // FINISHPAGE_H

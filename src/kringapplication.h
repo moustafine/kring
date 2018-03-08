@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -30,14 +30,14 @@ class KringApplication : public QApplication
   Q_OBJECT
 
 public:
-  KringApplication(int & argc, char ** argv);
+  KringApplication(int& argc, char** argv);
   ~KringApplication();
 
-  void setMainWindow(KringWindow * window);
+  void setMainWindow(KringWindow* window);
   void show();
 
 private:
-  KringWindow * mainWindow = nullptr;
+  KringWindow* mainWindow = nullptr;
 };
 
 #endif // KRINGAPPLICATION_H

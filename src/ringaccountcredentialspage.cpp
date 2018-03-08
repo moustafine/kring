@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "ui_ringaccountcredentialspage.h"
 
-RingAccountCredentialsPage::RingAccountCredentialsPage(QWidget * parent)
+RingAccountCredentialsPage::RingAccountCredentialsPage(QWidget* parent)
   : AbstractSettingsPage(parent)
 {
   ui = new Ui::RingAccountCredentialsPage();
@@ -43,10 +43,10 @@ RingAccountCredentialsPage::RingAccountCredentialsPage(QWidget * parent)
   KUser user;
   ui->fullNameLineEdit->setText(user.property(KUser::FullName).toString());
 
-  QRegularExpression userNameRegularExpression
-      (QStringLiteral("[A-Za-z0-9]+(-?[A-Za-z0-9]+)*"));
-  auto userNameValidator
-      = new QRegularExpressionValidator(userNameRegularExpression, this);
+  QRegularExpression userNameRegularExpression(
+    QStringLiteral("[A-Za-z0-9]+(-?[A-Za-z0-9]+)*"));
+  auto userNameValidator =
+    new QRegularExpressionValidator(userNameRegularExpression, this);
   ui->userNameLineEdit->setValidator(userNameValidator);
   ui->userNameLineEdit->setText(qgetenv("USER"));
 
@@ -56,14 +56,14 @@ RingAccountCredentialsPage::RingAccountCredentialsPage(QWidget * parent)
           &RingAccountCredentialsPage::validateUserName);
   validateUserName();
 
-  ui->searchingStateLabel
-      ->setVisible(ui->registerPublicUserNameCheckBox->isChecked());
+  ui->searchingStateLabel->setVisible(
+    ui->registerPublicUserNameCheckBox->isChecked());
 
   connect(ui->registerPublicUserNameCheckBox,
           &QCheckBox::stateChanged,
           this,
-          &RingAccountCredentialsPage
-          ::handleRegisterPublicUserNameCheckBoxStateChange);
+          &RingAccountCredentialsPage ::
+            handleRegisterPublicUserNameCheckBoxStateChange);
 
   connect(ui->passwordLineEdit,
           &QLineEdit::textEdited,
@@ -81,12 +81,14 @@ RingAccountCredentialsPage::~RingAccountCredentialsPage()
   delete ui;
 }
 
-bool RingAccountCredentialsPage::isValid() const
+bool
+RingAccountCredentialsPage::isValid() const
 {
   return userNameValid && passwordValid && confirmPasswordValid;
 }
 
-void RingAccountCredentialsPage::validate()
+void
+RingAccountCredentialsPage::validate()
 {
   validateUserName();
   validatePassword();
@@ -94,31 +96,36 @@ void RingAccountCredentialsPage::validate()
   return;
 }
 
-QString RingAccountCredentialsPage::getFullName() const
+QString
+RingAccountCredentialsPage::getFullName() const
 {
   return ui->fullNameLineEdit->text();
 }
 
-QString RingAccountCredentialsPage::getUserName() const
+QString
+RingAccountCredentialsPage::getUserName() const
 {
   return ui->userNameLineEdit->text();
 }
 
-QString RingAccountCredentialsPage::getPassword() const
+QString
+RingAccountCredentialsPage::getPassword() const
 {
   return ui->passwordLineEdit->text();
 }
 
-bool RingAccountCredentialsPage::isPublicUserNameRegistrationRequested() const
+bool
+RingAccountCredentialsPage::isPublicUserNameRegistrationRequested() const
 {
   return ui->registerPublicUserNameCheckBox->isChecked();
 }
 
-void RingAccountCredentialsPage::updateUi()
+void
+RingAccountCredentialsPage::updateUi()
 {
   KColorScheme colorScheme(QPalette::Active);
-  auto warningColorName = colorScheme
-      .background(KColorScheme::NegativeBackground)
+  auto warningColorName =
+    colorScheme.background(KColorScheme::NegativeBackground)
       .color()
       .name(QColor::HexRgb);
 
@@ -126,25 +133,22 @@ void RingAccountCredentialsPage::updateUi()
     setStyleSheet(QStringLiteral());
   } else {
     setStyleSheet(QStringLiteral("QLineEdit#userNameLineEdit {"
-                                 "background:")
-                  + warningColorName
-                  + QStringLiteral("}"));
+                                 "background:") +
+                  warningColorName + QStringLiteral("}"));
   }
 
   if (!passwordValid) {
-    setStyleSheet(styleSheet()
-                  + QStringLiteral("QLineEdit#passwordLineEdit {"
-                                   "background:")
-                  + warningColorName
-                  + QStringLiteral("}"));
+    setStyleSheet(styleSheet() +
+                  QStringLiteral("QLineEdit#passwordLineEdit {"
+                                 "background:") +
+                  warningColorName + QStringLiteral("}"));
   }
 
   if (!passwordValid || !confirmPasswordValid) {
-    setStyleSheet(styleSheet()
-                  + QStringLiteral("QLineEdit#confirmPasswordLineEdit {"
-                                   "background:")
-                  + warningColorName
-                  + QStringLiteral("}"));
+    setStyleSheet(styleSheet() +
+                  QStringLiteral("QLineEdit#confirmPasswordLineEdit {"
+                                 "background:") +
+                  warningColorName + QStringLiteral("}"));
   }
 
   if (userNameValid && passwordValid && confirmPasswordValid) {
@@ -156,7 +160,8 @@ void RingAccountCredentialsPage::updateUi()
   return;
 }
 
-void RingAccountCredentialsPage::validateUserName()
+void
+RingAccountCredentialsPage::validateUserName()
 {
   userNameValid = true;
 
@@ -169,9 +174,8 @@ void RingAccountCredentialsPage::validateUserName()
 
     ui->searchingStateLabel->setText(i18n("Searching..."));
 
-    NameDirectory::instance().lookupName(nullptr,
-                                         QStringLiteral(),
-                                         ui->userNameLineEdit->text());
+    NameDirectory::instance().lookupName(
+      nullptr, QStringLiteral(), ui->userNameLineEdit->text());
   } else {
     ui->searchingStateLabel->clear();
   }
@@ -181,7 +185,8 @@ void RingAccountCredentialsPage::validateUserName()
   return;
 }
 
-void RingAccountCredentialsPage::validatePassword()
+void
+RingAccountCredentialsPage::validatePassword()
 {
   passwordValid = true;
   if (ui->passwordLineEdit->text().isEmpty()) {
@@ -199,31 +204,28 @@ void RingAccountCredentialsPage::validatePassword()
 }
 
 void
-RingAccountCredentialsPage::handleRegisterPublicUserNameCheckBoxStateChange
-(int state)
+RingAccountCredentialsPage::handleRegisterPublicUserNameCheckBoxStateChange(
+  int state)
 {
   auto checkState = static_cast<Qt::CheckState>(state);
 
   switch (checkState) {
     case Qt::Checked:
-    case Qt::PartiallyChecked:
-    {
+    case Qt::PartiallyChecked: {
       connect(&NameDirectory::instance(),
               &NameDirectory::registeredNameFound,
               this,
               &RingAccountCredentialsPage::validatePublicUserName);
       break;
     }
-    case Qt::Unchecked:
-    {
+    case Qt::Unchecked: {
       disconnect(&NameDirectory::instance(),
                  &NameDirectory::registeredNameFound,
                  this,
                  &RingAccountCredentialsPage::validatePublicUserName);
       break;
     }
-    default:
-    {
+    default: {
       break;
     }
   }
@@ -233,11 +235,12 @@ RingAccountCredentialsPage::handleRegisterPublicUserNameCheckBoxStateChange
   return;
 }
 
-void RingAccountCredentialsPage::validatePublicUserName
-(const Account * account,
- NameDirectory::LookupStatus status,
- const QString & address,
- const QString & name)
+void
+RingAccountCredentialsPage::validatePublicUserName(
+  const Account* account,
+  NameDirectory::LookupStatus status,
+  const QString& address,
+  const QString& name)
 {
   Q_UNUSED(account)
   Q_UNUSED(address)
@@ -249,29 +252,24 @@ void RingAccountCredentialsPage::validatePublicUserName
   userNameValid = false;
 
   switch (status) {
-    case NameDirectory::LookupStatus::NOT_FOUND:
-    {
+    case NameDirectory::LookupStatus::NOT_FOUND: {
       userNameValid = true;
       ui->searchingStateLabel->setText(i18n("Name is available"));
       break;
     }
-    case NameDirectory::LookupStatus::SUCCESS:
-    {
+    case NameDirectory::LookupStatus::SUCCESS: {
       ui->searchingStateLabel->setText(i18n("Name is not available"));
       break;
     }
-    case NameDirectory::LookupStatus::INVALID_NAME:
-    {
+    case NameDirectory::LookupStatus::INVALID_NAME: {
       ui->searchingStateLabel->setText(i18n("Name is invalid"));
       break;
     }
-    case NameDirectory::LookupStatus::ERROR:
-    {
+    case NameDirectory::LookupStatus::ERROR: {
       ui->searchingStateLabel->setText(i18n("Network error"));
       break;
     }
-    default:
-    {
+    default: {
       break;
     }
   }

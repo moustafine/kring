@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -34,14 +34,14 @@ class AuthenticationDialog : public QDialog
   Q_OBJECT
 
 public:
-  explicit AuthenticationDialog(QWidget * parent = nullptr);
+  explicit AuthenticationDialog(QWidget* parent = nullptr);
   ~AuthenticationDialog();
 
 public:
   QString getPassword() const;
 
 private:
-  Ui::AuthenticationDialog * ui = nullptr;
+  Ui::AuthenticationDialog* ui = nullptr;
 };
 
 #endif // AUTHENTICATIONDIALOG_H

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -35,57 +35,59 @@ public:
   class StringSettingItem : public ItemString
   {
   public:
-    enum class Setting {
+    enum class Setting
+    {
       UserName,
       FullName
     };
 
   public:
-    StringSettingItem(Account & account,
+    StringSettingItem(Account& account,
                       Setting setting,
-                      const QString & group,
-                      const QString & key,
-                      QString & reference,
-                      const QString & defaultValue = QStringLiteral(""),
+                      const QString& group,
+                      const QString& key,
+                      QString& reference,
+                      const QString& defaultValue = QStringLiteral(""),
                       Type type = Normal);
     ~StringSettingItem();
 
   public:
-    void readConfig(KConfig * config) override;
-    void writeConfig(KConfig * config) override;
+    void readConfig(KConfig* config) override;
+    void writeConfig(KConfig* config) override;
 
   private:
-    Account & account;
+    Account& account;
     Setting setting;
   };
 
   class BoolSettingItem : public ItemBool
   {
   public:
-    enum class Setting {
+    enum class Setting
+    {
       AccountEnabled
     };
 
   public:
-    BoolSettingItem(Account & account,
+    BoolSettingItem(Account& account,
                     Setting setting,
-                    const QString & group,
-                    const QString & key,
-                    bool & reference,
+                    const QString& group,
+                    const QString& key,
+                    bool& reference,
                     bool defaultValue = true);
     ~BoolSettingItem();
 
   public:
-    void readConfig(KConfig * config) override;
-    void writeConfig(KConfig * config) override;
+    void readConfig(KConfig* config) override;
+    void writeConfig(KConfig* config) override;
 
   private:
-    Account & account;
+    Account& account;
     Setting setting;
   };
 
 public:
-  explicit AccountSettings(QObject * parent = nullptr);
+  explicit AccountSettings(QObject* parent = nullptr);
   ~AccountSettings();
 };
 

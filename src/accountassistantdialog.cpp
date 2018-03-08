@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -37,15 +37,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "progresspage.h"
 #include "ringaccountcredentialspage.h"
 
-AccountAssistantDialog::AccountAssistantDialog(QWidget * parent,
+AccountAssistantDialog::AccountAssistantDialog(QWidget* parent,
                                                Qt::WindowFlags flag)
   : KAssistantDialog(parent, flag)
 {
   setWindowTitle(i18n("Account assistant"));
 
   ringAccountCredentialsPage = new RingAccountCredentialsPage();
-  ringAccountCredentialsPageItem = addPage(ringAccountCredentialsPage,
-                                           i18n("Ring account credentials"));
+  ringAccountCredentialsPageItem =
+    addPage(ringAccountCredentialsPage, i18n("Ring account credentials"));
 
   connect(ringAccountCredentialsPage,
           &RingAccountCredentialsPage::valid,
@@ -71,8 +71,10 @@ AccountAssistantDialog::~AccountAssistantDialog()
   ;
 }
 
-void AccountAssistantDialog::handleCurrentPageChange
-(KPageWidgetItem * currentPageItem, KPageWidgetItem * previousPageItem)
+void
+AccountAssistantDialog::handleCurrentPageChange(
+  KPageWidgetItem* currentPageItem,
+  KPageWidgetItem* previousPageItem)
 {
   if (currentPageItem == ringAccountCredentialsPageItem) {
     setStandardButtons(QDialogButtonBox::Cancel);
@@ -92,7 +94,8 @@ void AccountAssistantDialog::handleCurrentPageChange
   return;
 }
 
-void AccountAssistantDialog::setValidPage(QWidget * page, bool valid)
+void
+AccountAssistantDialog::setValidPage(QWidget* page, bool valid)
 {
   if (currentPage()->widget() == page) {
     setValid(currentPage(), valid);
@@ -101,10 +104,11 @@ void AccountAssistantDialog::setValidPage(QWidget * page, bool valid)
   return;
 }
 
-void AccountAssistantDialog::closeEvent(QCloseEvent * event)
+void
+AccountAssistantDialog::closeEvent(QCloseEvent* event)
 {
-  if ((currentPage() == progressPageItem)
-      && (account->editState() != Account::EditState::REMOVED)) {
+  if ((currentPage() == progressPageItem) &&
+      (account->editState() != Account::EditState::REMOVED)) {
     event->ignore();
   } else {
     event->accept();
@@ -113,11 +117,11 @@ void AccountAssistantDialog::closeEvent(QCloseEvent * event)
   return;
 }
 
-void AccountAssistantDialog::createRingAccount()
+void
+AccountAssistantDialog::createRingAccount()
 {
-  account
-      = AccountModel::instance().add(ringAccountCredentialsPage->getUserName(),
-                                     Account::Protocol::RING);
+  account = AccountModel::instance().add(
+    ringAccountCredentialsPage->getUserName(), Account::Protocol::RING);
   if (!ringAccountCredentialsPage->getFullName().isEmpty()) {
     account->setDisplayName(ringAccountCredentialsPage->getFullName());
   }
@@ -132,28 +136,27 @@ void AccountAssistantDialog::createRingAccount()
   connect(&AccountModel::instance(),
           &AccountModel::accountRemoved,
           this,
-          [this](Account * removedAccount)
-  {
-    if (account == removedAccount) {
-      account->performAction(Account::EditAction::REMOVE);
-      close();
-    }
-    return;
-  });
+          [this](Account* removedAccount) {
+            if (account == removedAccount) {
+              account->performAction(Account::EditAction::REMOVE);
+              close();
+            }
+            return;
+          });
 
   account->performAction(Account::EditAction::SAVE);
 
   return;
 }
 
-void AccountAssistantDialog::handleAccountStateChange
-(Account::RegistrationState state)
+void
+AccountAssistantDialog::handleAccountStateChange(
+  Account::RegistrationState state)
 {
   switch (state) {
     case Account::RegistrationState::READY:
     case Account::RegistrationState::UNREGISTERED:
-    case Account::RegistrationState::TRYING:
-    {
+    case Account::RegistrationState::TRYING: {
       disconnect(account,
                  &Account::stateChanged,
                  this,
@@ -178,23 +181,22 @@ void AccountAssistantDialog::handleAccountStateChange
 
       finishPage->insertWidget(finishPage->getItemCount() - 1, idGroupBox);
 
-      if (ringAccountCredentialsPage
-          ->isPublicUserNameRegistrationRequested()) {
-        auto publicUserNameRegistrationStarted
-            = account->registerName(ringAccountCredentialsPage->getPassword(),
-                                    ringAccountCredentialsPage->getUserName());
+      if (ringAccountCredentialsPage->isPublicUserNameRegistrationRequested()) {
+        auto publicUserNameRegistrationStarted =
+          account->registerName(ringAccountCredentialsPage->getPassword(),
+                                ringAccountCredentialsPage->getUserName());
         if (publicUserNameRegistrationStarted) {
-          connect(account,
-                  &Account::nameRegistrationEnded,
-                  this,
-                  &AccountAssistantDialog
-                  ::handlePublicUserNameRegistrationEnd);
+          connect(
+            account,
+            &Account::nameRegistrationEnded,
+            this,
+            &AccountAssistantDialog ::handlePublicUserNameRegistrationEnd);
           return;
         } else {
-          auto messageWidget
-              = new KMessageWidget(i18n("Could not start"
-                                        " public user name"
-                                        " registration process."));
+          auto messageWidget =
+            new KMessageWidget(i18n("Could not start"
+                                    " public user name"
+                                    " registration process."));
           messageWidget->setWordWrap(true);
           messageWidget->setMessageType(KMessageWidget::Error);
 
@@ -206,8 +208,7 @@ void AccountAssistantDialog::handleAccountStateChange
 
       break;
     }
-    case Account::RegistrationState::ERROR:
-    {
+    case Account::RegistrationState::ERROR: {
       disconnect(account,
                  &Account::stateChanged,
                  this,
@@ -223,8 +224,7 @@ void AccountAssistantDialog::handleAccountStateChange
     }
     case Account::RegistrationState::INITIALIZING:
     case Account::RegistrationState::COUNT__:
-    default:
-    {
+    default: {
       break;
     }
   }
@@ -232,8 +232,10 @@ void AccountAssistantDialog::handleAccountStateChange
   return;
 }
 
-void AccountAssistantDialog::handlePublicUserNameRegistrationEnd
-(NameDirectory::RegisterNameStatus status, const QString & name)
+void
+AccountAssistantDialog::handlePublicUserNameRegistrationEnd(
+  NameDirectory::RegisterNameStatus status,
+  const QString& name)
 {
   Q_UNUSED(name);
 
@@ -247,10 +249,10 @@ void AccountAssistantDialog::handlePublicUserNameRegistrationEnd
 
     auto publicUserNameLayout = new QVBoxLayout(publicUserNameGroupBox);
 
-    auto publicUserNameLabel = new QLabel(QStringLiteral("ring:")
-                                          + account->registeredName());
-    publicUserNameLabel
-        ->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+    auto publicUserNameLabel =
+      new QLabel(QStringLiteral("ring:") + account->registeredName());
+    publicUserNameLabel->setFont(
+      QFontDatabase::systemFont(QFontDatabase::FixedFont));
     publicUserNameLabel->setAlignment(Qt::AlignCenter);
     publicUserNameLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
 
@@ -267,39 +269,29 @@ void AccountAssistantDialog::handlePublicUserNameRegistrationEnd
     const auto space = QStringLiteral(" ");
 
     switch (status) {
-      case NameDirectory::RegisterNameStatus::WRONG_PASSWORD:
-      {
-        messageWidget->setText(messagePart
-                               + space
-                               + i18n("Password is wrong."));
+      case NameDirectory::RegisterNameStatus::WRONG_PASSWORD: {
+        messageWidget->setText(messagePart + space +
+                               i18n("Password is wrong."));
         break;
       }
-      case NameDirectory::RegisterNameStatus::INVALID_NAME:
-      {
-        messageWidget->setText(messagePart
-                               + space
-                               + i18n("User name is invalid."));
+      case NameDirectory::RegisterNameStatus::INVALID_NAME: {
+        messageWidget->setText(messagePart + space +
+                               i18n("User name is invalid."));
         break;
       }
-      case NameDirectory::RegisterNameStatus::ALREADY_TAKEN:
-      {
-        messageWidget->setText(messagePart
-                               + space
-                               + i18n("User name is already taken."));
+      case NameDirectory::RegisterNameStatus::ALREADY_TAKEN: {
+        messageWidget->setText(messagePart + space +
+                               i18n("User name is already taken."));
         break;
       }
-      case NameDirectory::RegisterNameStatus::NETWORK_ERROR:
-      {
-        messageWidget->setText(messagePart
-                               + space
-                               + i18n("Network error has occurred."));
+      case NameDirectory::RegisterNameStatus::NETWORK_ERROR: {
+        messageWidget->setText(messagePart + space +
+                               i18n("Network error has occurred."));
         break;
       }
-      default:
-      {
-        messageWidget->setText(messagePart
-                               + space
-                               + i18n("Unknown error has occurred."));
+      default: {
+        messageWidget->setText(messagePart + space +
+                               i18n("Unknown error has occurred."));
         break;
       }
     }

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017 by Marat Moustafine <moustafine@tuta.io>
+Copyright (C) 2017-2018 by Marat Moustafine <moustafine@tuta.io>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
@@ -30,19 +30,19 @@ class AccountProxyModel : public QIdentityProxyModel
   Q_OBJECT
 
 public:
-  explicit AccountProxyModel(QObject * parent = nullptr);
+  explicit AccountProxyModel(QObject* parent = nullptr);
   ~AccountProxyModel();
 
 public:
-  void setSourceModel(QAbstractItemModel * sourceModel) override;
+  void setSourceModel(QAbstractItemModel* sourceModel) override;
 
   QModelIndex index(int row,
                     int column,
-                    const QModelIndex & parent = QModelIndex()) const override;
+                    const QModelIndex& parent = QModelIndex()) const override;
 
-  int columnCount(const QModelIndex & parent = QModelIndex()) const override;
+  int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
-  QVariant data(const QModelIndex & index,
+  QVariant data(const QModelIndex& index,
                 int role = Qt::DisplayRole) const override;
 
   QVariant headerData(int section,
@@ -50,7 +50,7 @@ public:
                       int role = Qt::DisplayRole) const override;
 
 public slots:
-  void handleAccountStateChange(Account * account,
+  void handleAccountStateChange(Account* account,
                                 const Account::RegistrationState state);
 };
 
