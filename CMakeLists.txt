@@ -1,21 +1,17 @@
-project(kring)
+cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
 
-cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
-set(QT_MIN_VERSION "5.3.0")
+project(kring)
 
 find_package(ECM 1.0.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH
   ${ECM_MODULE_PATH}
   ${ECM_KDE_MODULE_DIR}
-  ${CMAKE_CURRENT_SOURCE_DIR}/cmake
+  ${CMAKE_CURRENT_SOURCE_DIR}/.cmake/modules
 )
 
-include(ECMInstallIcons)
-include(KDEInstallDirs)
-include(KDECMakeSettings)
-include(KDECompilerSettings NO_POLICY_SCOPE)
 include(FeatureSummary)
 
+set(QT_MIN_VERSION "5.7.0")
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS
   Core
   Gui
@@ -40,6 +36,10 @@ feature_summary(WHAT ALL
   FATAL_ON_MISSING_REQUIRED_PACKAGES
 )
 
-add_subdirectory(doc)
-add_subdirectory(src)
-add_subdirectory(icons)
+add_subdirectory(app/${PROJECT_NAME})
+
+add_subdirectory(doc/${PROJECT_NAME})
+
+add_subdirectory(icon/${PROJECT_NAME})
+
+add_subdirectory(meta/${PROJECT_NAME})
